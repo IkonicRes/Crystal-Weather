@@ -3,7 +3,7 @@ body {
     width: 100%;
     background-color: var(--menu-bkgcolor);
     color: var(--main-text-color);
-    font-family: 'MedievalSharp';
+    font-family: 'Merriweather';
     display: flex;
     flex-direction: column;
     align-items: center;
