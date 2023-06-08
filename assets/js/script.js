@@ -1,81 +1,174 @@
-// This code initializes the changeWeather function, which is intended to be called whenever the weather changes in order to play the cloud animation.
-function changeWeather() {
-    // First, we initialize an empty array to store the cloud images.
-    let images = []
-    // Next, we get the image source paths from our project.
-    let imageSources = [
-      '../assets/images/cloud1.png',
-      '../assets/images/cloud2.png',
-      '../assets/images/cloud3.png',
-      '../assets/images/cloud4.png',
-      '../assets/images/cloud5.png'
-    ]
-    // We create a counter variable to keep track of the number of loaded images.
-    let loadCount = 0;
-    // And iterate over each image source and create an Image object for each.
-    imageSources.forEach((source, index) => {
-        let img = new Image();
+const sunnyClear = '../assets/images/backgrounds/sunny-clear.png';
+const sunnyShowers = '../assets/images/backgrounds/sunny-showers.png';
+// Create a function to change the weather background
+function changeWeather(startWeather, targetWeather) {
+// Create a temporary background element with the startWeather image
+  const tempBackground = $('<div>').css({
+    // Set the CSS properties for the temporary background
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    background: `url(${startWeather}) no-repeat center center fixed`,
+    'background-size': 'cover',
+    'z-index': -1
+  // Append the temporary background to the body and hide it
+  }).appendTo('body').hide();
+  // Define the image sources for the cloud animation
+  const imageSources = [
+    '../assets/images/animation/cloud1.png',
+    '../assets/images/animation/cloud2.png',
+    '../assets/images/animation/cloud3.png',
+    '../assets/images/animation/cloud4.png',
+    '../assets/images/animation/cloud5.png'
+  ];
+  // Create an array to store the loaded cloud images
+  const images = [];
+  // Initialize a counter for the loaded images
+  let loadCount = 0;
+  // Create a fadePromise using a Promise to handle the background fade
+  const fadePromise = new Promise((resolve, reject) => {
+    // Fade in the temporary background
+    tempBackground.fadeIn(400, function() {
+    // Set the target weather image as the background of the body 
+      $('body').css('background-image', `url(${targetWeather})`);
+    // Load the cloud images and store them in the images array 
+      imageSources.forEach((source, index) => {
+        const img = new Image();
         img.src = source;
-        // Once an image is loaded, we increment the counter and check if all images have been loaded.
         img.onload = function() {
           images[index] = img;
+          // Increment the load count and check if all images have been loaded
           loadCount++;
+          // If all images have been loaded, start the cloud animation and resolve the promise
           if (loadCount === imageSources.length) {
-            // If all images have been loaded, we start the cloud animation.
             startAnimation();
+            resolve();
           }
         };
       });
-      // We retrieve the canvas element using jQuery and get its 2D rendering context.
-    let canvas = $('#canvas')[0];
-    let ctx = canvas.getContext('2d');
-    // Then we define an array of cloud layers, each with an image index and speed.
-    let cloudLayers = [
+      // Fade out the temporary background and call fadeOutClouds when complete
+      tempBackground.fadeOut(1000, fadeOutClouds);
+    });
+  });
+  // Use Promise.all to wait for the fadePromise to complete
+  Promise.all([fadePromise])
+    .then(() => {
+      // Log a message when the background fade and image loading are complete
+      console.log('Background fade and image loading complete');
+    })
+    .catch(error => {
+      // Log an error if there was an error during the promise chain
+      console.error(error);
+    });
+  // Create a canvas element and set its CSS properties
+  const canvas = $('<canvas id="canvas"></canvas>').css({
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    'z-index': -1
+  // Append the canvas to the body
+  }).appendTo('body');
+  // Get the 2D rendering context of the canvas
+  const ctx = canvas[0].getContext('2d');
+  // Define the cloud layers with their image index and speed
+  const cloudLayers = [
     { imageIndex: 0, speed: 1 },
     { imageIndex: 1, speed: 0.82 },
     { imageIndex: 2, speed: 0.68 },
     { imageIndex: 3, speed: 0.63 },
     { imageIndex: 4, speed: 0.43 }
-    ];
-    // This function animates the clouds by clearing the canvas, updating the cloud positions, and drawing the current cloud image.
-    function animate() {
-    // Clear the canvas for the new frame
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
+  ];
+  // Initialize variables for animation control
+  let animationRunning = true;
+  // Define the animate function to update and draw the cloud animation
+  let cloudOpacity = 0;
+  // Check if animation is running and return if not
+  function animate() {
+    if (!animationRunning) {
+      return;
+    }
+    // Clear the canvas before drawing the next frame
+    ctx.clearRect(0, 0, canvas[0].width, canvas[0].height);
+    // Update the cloud opacity and limit it to 1
+    cloudOpacity += 0.01;
+    // Set the global alpha for transparencY
+    if (cloudOpacity > 1) {
+      cloudOpacity = 1;
+    }
+    // Update the position of each cloud layer and wrap around if necessary
+    ctx.globalAlpha = cloudOpacity;
+    // Draw each cloud layer on the canvas
     cloudLayers.forEach(layer => {
-        // Calculate the cloud's x position based on its speed
-        layer.xPos += layer.speed;
+      layer.xPos += layer.speed;
 
-        // Wrap the cloud back to the left side of the canvas when it goes off-screen
-        if (layer.xPos > canvas.width) {
-        layer.xPos = -canvas.width;
-        }
+      if (layer.xPos > canvas[0].width) {
+        layer.xPos = -canvas[0].width;
+      }
 
-        // Draw the current cloud image at its position
-        ctx.drawImage(
+      ctx.drawImage(
         images[layer.imageIndex],
         layer.xPos,
         0,
-        canvas.width * 1.5,
-        canvas.height * 1.5
-        );
+        canvas[0].width * 1.5,
+        canvas[0].height * 1.5
+      );
     });
 
-    // Request the next frame
     window.requestAnimationFrame(animate);
-    }
-
-    function startAnimation() {
-    // Initialize the x position for each cloud layer
+  }
+  // Define the startAnimation function to start the cloud animation
+  function startAnimation() {
+    // Set animationRunning to true and reset the cloud opacity
+    animationRunning = true;
+    cloudOpacity = 0;
+    // Reset the position of each cloud layer
     cloudLayers.forEach(layer => {
-        layer.xPos = 0;
+      layer.xPos = 0;
     });
-
-    // Start the animation
+    // Request the first animation frame
     window.requestAnimationFrame(animate);
-    }
+  }
+  // Define the stopAnimation function to stop the cloud animation
+  function stopAnimation() {
+    // Set animationRunning to false
+    animationRunning = false;
+  }
+  // Define the fadeOutClouds function to fade out the clouds and stop the animation
+  function fadeOutClouds() {
+    // Initialize the opacity for fading out
+    let opacity = 1;
+    // Set an interval to gradually decrease the opacity
+    const fadeInterval = setInterval(function() {
+      opacity -= 0.01;
+      // When opacity reaches 0, clear the interval, stop the animation, fade out the canvas, and remove it
+      if (opacity <= 0) {
+        clearInterval(fadeInterval);
+        stopAnimation();
+        $(canvas).fadeOut(1000, function() {
+          $(this).remove();
+          // Log a message indicating that the animation has stopped
+          console.log("Animation stopped");
+        });
+      } else {
+        ctx.clearRect(0, 0, canvas[0].width, canvas[0].height);
+        ctx.globalAlpha = opacity;
 
-    // Call the changeWeather function to start the cloud animation
-    startAnimation();
+        cloudLayers.forEach(layer => {
+          ctx.drawImage(
+            images[layer.imageIndex],
+            layer.xPos,
+            0,
+            canvas[0].width * 1.5,
+            canvas[0].height * 1.5
+          );
+        });
+      }
+    }, 20);
+  }
 }
-changeWeather()
+//DEBUG: Call the changeWeather function with the startWeather and targetWeather as arguments
+changeWeather(sunnyClear, sunnyShowers);
