@@ -1,5 +1,45 @@
-const sunnyClear = '../images/backgrounds/sunny-clear.png';
-const sunnyShowers = '../images/backgrounds/sunny-showers.png';
+const blankWeather = '../assets/images/backgrounds/blank.png';
+const sunnyClear = '../assets/images/backgrounds/sunny-clear.png';
+const rainDrizzle = '../assets/images/backgrounds/sunny-drizzle.png';
+const sunnyRain = '../assets/images/backgrounds/sunny-rain.png';
+const cloudyClear = '../assets/images/backgrounds/cloudy-clear.png';
+const snowy = '../assets/images/backgrounds/snowy.png';
+const thunderStorm = '../assets/images/backgrounds/thunder-storm.png';
+const weathers = {
+  Clear: sunnyClear,
+  Clouds: cloudyClear,
+  Rain: sunnyRain,
+  Snow: snowy,
+  Drizzle: rainDrizzle,
+  Thunderstorm: thunderStorm,
+  // Atmosphere: {
+  //   Mist:,
+  //   Smoke:,
+  //   Haze:,
+  //   Dust:,
+  //   Fog:,
+  //   Sand:,
+  //   Ash:,
+  //   Squall:,
+  //   Tornado:,
+  // }
+}
+var latitude
+var longitude 
+var previousData = {}
+var currentData = {}
+
+function determineWeather() {
+  if (previousData === {}) {
+    let oldWeather = (previousData.weather[0].main)
+    oldWeather = weathers[oldWeather]
+  }
+  else {oldWeather = blankWeather}
+  let newWeather = (currentData.weather[0].main)
+  newWeather = weathers[newWeather]
+  console.log(newWeather)
+  changeWeather(oldWeather, newWeather)
+}
 // Create a function to change the weather background
 function changeWeather(startWeather, targetWeather) {
 // Create a temporary background element with the startWeather image
@@ -10,18 +50,19 @@ function changeWeather(startWeather, targetWeather) {
     left: 0,
     width: '100%',
     height: '100%',
-    background: `url(${startWeather}) no-repeat center center fixed`,
-    'background-size': 'cover',
-    'z-index': -1
+    background: `url(${startWeather})`,
+    'background-size': 'contain',
+    'z-index': -1,
+    'background-repeat': "no-repeat"
   // Append the temporary background to the body and hide it
   }).appendTo('body').hide();
   // Define the image sources for the cloud animation
   const imageSources = [
-    '../images/animation/cloud1.png',
-    '../images/animation/cloud2.png',
-    '../images/animation/cloud3.png',
-    '../images/animation/cloud4.png',
-    '../images/animation/cloud5.png'
+    '../assets/images/animation/cloud1.png',
+    '../assets/images/animation/cloud2.png',
+    '../assets/images/animation/cloud3.png',
+    '../assets/images/animation/cloud4.png',
+    '../assets/images/animation/cloud5.png'
   ];
   // Create an array to store the loaded cloud images
   const images = [];
@@ -32,22 +73,24 @@ function changeWeather(startWeather, targetWeather) {
     // Fade in the temporary background
     tempBackground.fadeIn(400, function() {
     // Set the target weather image as the background of the body 
-      $('body').css('background-image', `url(${targetWeather})`);
+    $('body').css('background-image', `url(${targetWeather})`);
+    $('body').css('background-repeat', `no-repeat`);
     // Load the cloud images and store them in the images array 
-      imageSources.forEach((source, index) => {
-        const img = new Image();
-        img.src = source;
-        img.onload = function() {
-          images[index] = img;
-          // Increment the load count and check if all images have been loaded
-          loadCount++;
-          // If all images have been loaded, start the cloud animation and resolve the promise
-          if (loadCount === imageSources.length) {
-            startAnimation();
-            resolve();
-          }
-        };
-      });
+    imageSources.forEach((source, index) => {
+      const img = new Image();
+      img.src = source;
+      img.onload = function() {
+        images[index] = img;
+        // Increment the load count and check if all images have been loaded
+        loadCount++;
+        // If all images have been loaded, start the cloud animation and resolve the promise
+        if (loadCount === imageSources.length) {
+          console.log(images);  // Debugging line
+          startAnimation();
+          resolve();
+        }
+      };
+    });
       // Fade out the temporary background and call fadeOutClouds when complete
       tempBackground.fadeOut(1000, fadeOutClouds);
     });
@@ -171,29 +214,46 @@ function changeWeather(startWeather, targetWeather) {
   }
 }
 //DEBUG: Call the changeWeather function with the startWeather and targetWeather as arguments
-changeWeather(sunnyClear, sunnyShowers);
 
+var apiKey = '81fba63bc262d8384351efd1abd18569'
+var cityName = 'Minneapolis';
 
-// var apiKey = '81fba63bc262d8384351efd1abd18569';
-// var cityName = 'Minneapolis';
+// Construct the API URL
+var apiLocationUrl = 'https://api.openweathermap.org/geo/1.0/direct?q=' + cityName + '&limit=1&appid=' + apiKey;
 
-// // Construct the API URL
-// var apiUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=' + cityName + '&limit=1&appid=' + apiKey;
+// Make the API request
+fetch(apiLocationUrl)
+.then(response => response.json())
+.then(data => {
+    // Handle the API response
+    if (data.length > 0) {
+        var latitude = data[0].lat;
+        var longitude = data[0].lon;
+        console.log('Latitude:', latitude);
+        console.log('Longitude:', longitude);
 
-// // Make the API request
-// fetch(apiUrl)
-// .then(response => response.json())
-// .then(data => {
-// // Handle the API response
-// if (data.length > 0) {
-// var latitude = data[0].lat;
-// var longitude = data[0].lon;
-// console.log('Latitude:', latitude);
-// console.log('Longitude:', longitude);
-// } else {
-// console.log('No results found for the specified city.');
-// }
-// })
-// .catch(error => {
-// console.log('API request failed. Error:', error);
-// });
+        var apiWeatherUrl = 'https://api.openweathermap.org/data/2.5/weather?lat=' + latitude + '&lon=' + longitude + '&appid=' + apiKey;
+
+        // Make the API request
+        fetch(apiWeatherUrl)
+        .then(response => response.json())
+        .then(data => {
+            // Handle the API response
+            if (data) {
+                previousData = currentData;
+                currentData = data;
+                determineWeather()
+            } else {
+                console.log('No results found for the specified location.');
+            }
+        })
+        .catch(error => {
+            console.log('API request failed. Error:', error);
+        });
+    } else {
+        console.log('No results found for the specified city.');
+    }
+})
+.catch(error => {
+    console.log('API request failed. Error:', error);
+});
