@@ -1,5 +1,5 @@
-const sunnyClear = '../assets/images/backgrounds/sunny-clear.png';
-const sunnyShowers = '../assets/images/backgrounds/sunny-showers.png';
+const sunnyClear = '../images/backgrounds/sunny-clear.png';
+const sunnyShowers = '../images/backgrounds/sunny-showers.png';
 // Create a function to change the weather background
 function changeWeather(startWeather, targetWeather) {
 // Create a temporary background element with the startWeather image
@@ -17,11 +17,11 @@ function changeWeather(startWeather, targetWeather) {
   }).appendTo('body').hide();
   // Define the image sources for the cloud animation
   const imageSources = [
-    '../assets/images/animation/cloud1.png',
-    '../assets/images/animation/cloud2.png',
-    '../assets/images/animation/cloud3.png',
-    '../assets/images/animation/cloud4.png',
-    '../assets/images/animation/cloud5.png'
+    '../images/animation/cloud1.png',
+    '../images/animation/cloud2.png',
+    '../images/animation/cloud3.png',
+    '../images/animation/cloud4.png',
+    '../images/animation/cloud5.png'
   ];
   // Create an array to store the loaded cloud images
   const images = [];
@@ -172,3 +172,28 @@ function changeWeather(startWeather, targetWeather) {
 }
 //DEBUG: Call the changeWeather function with the startWeather and targetWeather as arguments
 changeWeather(sunnyClear, sunnyShowers);
+
+
+// var apiKey = '81fba63bc262d8384351efd1abd18569';
+// var cityName = 'Minneapolis';
+
+// // Construct the API URL
+// var apiUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=' + cityName + '&limit=1&appid=' + apiKey;
+
+// // Make the API request
+// fetch(apiUrl)
+// .then(response => response.json())
+// .then(data => {
+// // Handle the API response
+// if (data.length > 0) {
+// var latitude = data[0].lat;
+// var longitude = data[0].lon;
+// console.log('Latitude:', latitude);
+// console.log('Longitude:', longitude);
+// } else {
+// console.log('No results found for the specified city.');
+// }
+// })
+// .catch(error => {
+// console.log('API request failed. Error:', error);
+// });
