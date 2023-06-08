@@ -1,10 +1,11 @@
-const blankWeather = '../assets/images/backgrounds/blank.png';
+var blankWeather = '../assets/images/backgrounds/blank.png';
 const sunnyClear = '../assets/images/backgrounds/sunny-clear.png';
 const rainDrizzle = '../assets/images/backgrounds/sunny-drizzle.png';
 const sunnyRain = '../assets/images/backgrounds/sunny-rain.png';
-const cloudyClear = '../assets/images/backgrounds/cloudy-clear.png';
+var cloudyClear = '../assets/images/backgrounds/cloudy-clear.png';
 const snowy = '../assets/images/backgrounds/snowy.png';
 const thunderStorm = '../assets/images/backgrounds/thunder-storm.png';
+thunderStorm2 = ''
 const weathers = {
   Clear: sunnyClear,
   Clouds: cloudyClear,
