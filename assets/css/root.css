@@ -1,0 +1,22 @@
+:root {
+    /* COLORS */
+        /* BACKGROUND COLORS */
+        --menu-bkgcolor: black;
+        /* TEXT COLORS */
+        --main-text-color: rgb(0, 177, 204);
+        /* SHADOW COLORS */
+        --shadowcolor: rgb(255, 255, 255);
+    /* TEXT EFFECTS */
+        --base-textshadow: -1px 1px 1px var(--shadowcolor),
+        1px 1px 1px var(--shadowcolor),
+        -1px -1px 1px var(--shadowcolor),
+        1px -1px 1px var(--shadowcolor);
+    /* SIZES  */
+        --h1-textsize: 4vw;
+    /* SPACING */
+        --h1-margintop: 25vh;
+    /* BORDERS */
+
+    /* TRANSFORM */
+
+}
