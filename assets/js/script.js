@@ -25,6 +25,8 @@ const weathers = {
   //   Tornado:,
   // }
 }
+const baseDir = window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/"));
+
 var latitude
 var longitude 
 var previousData = {}
@@ -43,6 +45,8 @@ function determineWeather() {
 }
 // Create a function to change the weather background
 function changeWeather(startWeather, targetWeather) {
+  startWeather = baseDir + startWeather
+  targetWeather = baseDir + targetWeather
 // Create a temporary background element with the startWeather image
   const tempBackground = $('<div>').css({
     // Set the CSS properties for the temporary background
@@ -79,7 +83,7 @@ function changeWeather(startWeather, targetWeather) {
     // Load the cloud images and store them in the images array 
     imageSources.forEach((source, index) => {
       const img = new Image();
-      baseDir = window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/"));
+      
       img.src = baseDir + source;
       console.log(img.src)
       img.onload = function() {
