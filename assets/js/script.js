@@ -78,8 +78,13 @@ function changeWeather(startWeather, targetWeather) {
     // Fade in the temporary background
     tempBackground.fadeIn(400, function() {
     // Set the target weather image as the background of the body 
-    $('body').css('background-image', `url(${targetWeather})`);
-    $('body').css('background-repeat', `no-repeat`);
+    $('body').css({
+      'background-image': `url(${targetWeather})`,
+      'background-size': 'cover',
+      'z-index': -1,
+      'background-repeat': 'no-repeat'
+    });
+  
     // Load the cloud images and store them in the images array 
     imageSources.forEach((source, index) => {
       const img = new Image();

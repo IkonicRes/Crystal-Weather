@@ -9,9 +9,10 @@ body {
     align-items: center;
     /* background-image: url(../images/sunny-clear.png); */
 }
-canvas {
-    
+
+h1{
 }
+
 #canvas {
     position: fixed;
     top: 0;
@@ -22,7 +23,47 @@ canvas {
   }
 
   #content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     position: relative;
     z-index: 1;
-    /* Add your desired styling for the content */
   }
+
+#search {
+  position: fixed;
+  bottom: 4vw;
+  display: inherit;
+  justify-self: end;
+  height: 3rem;
+  min-width: 3rem;
+  max-height: 5rem;
+  background-image: url(../images/icons/search.png);
+  background-size: auto 100%;
+  background-repeat: no-repeat;
+  background-position: left center;
+  padding-left: 2.25rem;
+  transition: max-height 2.5s ease-out, padding 2s, ease-out;
+}
+
+#search > input {
+  margin-top: .1vw;
+  padding: .2vw;
+  font-size: 0;
+  overflow: hidden;
+  background: #ffffff56;
+  border: 0;
+  opacity: 0;
+  /* transition: opacity .5s ease-in-out; */
+  width: calc(100% - 2.25rem); /* Adjusted width to account for padding */
+}
+
+#search:hover input {
+  border: 1px solid rgba(129, 129, 129, 0.656);
+  padding: .8vw;
+  margin-left: 1vw;
+  font-size: 1rem;
+  border-radius: 30%;
+  transition: border .5s ease-in, padding .5s ease-in, font-size .5s ease-in, opacity 1s ease-in-out;
+  opacity: 1;
+}
