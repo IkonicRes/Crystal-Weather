@@ -112,6 +112,7 @@ function changeWeather(startWeather, targetWeather) {
     .then(() => {
       // Log a message when the background fade and image loading are complete
       console.log('Background fade and image loading complete');
+      console.log(cityName)
     })
     .catch(error => {
       // Log an error if there was an error during the promise chain
@@ -231,41 +232,56 @@ var apiKey = '81fba63bc262d8384351efd1abd18569'
 var cityName = 'Minneapolis';
 
 // Construct the API URL
-var apiLocationUrl = 'https://api.openweathermap.org/geo/1.0/direct?q=' + cityName + '&limit=1&appid=' + apiKey;
 
-// Make the API request
-fetch(apiLocationUrl)
-.then(response => response.json())
-.then(data => {
-    // Handle the API response
-    if (data.length > 0) {
-        var latitude = data[0].lat;
-        var longitude = data[0].lon;
-        console.log('Latitude:', latitude);
-        console.log('Longitude:', longitude);
+function weatherFetch() {
+  var apiLocationUrl = 'https://api.openweathermap.org/geo/1.0/direct?q=' + cityName + '&limit=1&appid=' + apiKey;
+  // Make the API request
+  fetch(apiLocationUrl)
+  .then(response => response.json())
+  .then(data => {
+      // Handle the API response
+      if (data.length > 0) {
+          var latitude = data[0].lat;
+          var longitude = data[0].lon;
+          console.log('Latitude:', latitude);
+          console.log('Longitude:', longitude);
 
-        var apiWeatherUrl = 'https://api.openweathermap.org/data/2.5/weather?lat=' + latitude + '&lon=' + longitude + '&appid=' + apiKey;
+          var apiWeatherUrl = 'https://api.openweathermap.org/data/2.5/weather?lat=' + latitude + '&lon=' + longitude + '&appid=' + apiKey;
 
-        // Make the API request
-        fetch(apiWeatherUrl)
-        .then(response => response.json())
-        .then(data => {
-            // Handle the API response
-            if (data) {
-                previousData = currentData;
-                currentData = data;
-                determineWeather()
-            } else {
-                console.log('No results found for the specified location.');
-            }
-        })
-        .catch(error => {
-            console.log('API request failed. Error:', error);
-        });
-    } else {
-        console.log('No results found for the specified city.');
+          // Make the API request
+          fetch(apiWeatherUrl)
+          .then(response => response.json())
+          .then(data => {
+              // Handle the API response
+              if (data) {
+                  previousData = currentData;
+                  currentData = data;
+                  determineWeather()
+                  console.log(currentData)
+              } else {
+                  console.log('No results found for the specified location.');
+              }
+          })
+          .catch(error => {
+              console.log('API request failed. Error:', error);
+          });
+      } else {
+          console.log('No results found for the specified city.');
+      }
+  })
+  .catch(error => {
+      console.log('API request failed. Error:', error);
+  });
+}
+$('#search-bar').keypress(function(event) {
+  var keycode = event.keyCode ? event.keyCode : event.which;
+  if (keycode === 13) {
+    var toSearch = $(this).val();
+    cityName = toSearch;
+    try {
+      weatherFetch();
+    } catch (error) {
+      console.log("No city found!");
     }
-})
-.catch(error => {
-    console.log('API request failed. Error:', error);
+  }
 });
