@@ -56,7 +56,7 @@ function changeWeather(startWeather, targetWeather) {
     width: '100%',
     height: '100%',
     background: `url(${startWeather})`,
-    'background-size': 'contain',
+    'background-size': 'cover',
     'z-index': -1,
     'background-repeat': "no-repeat"
   // Append the temporary background to the body and hide it
