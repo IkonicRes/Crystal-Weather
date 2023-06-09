@@ -1,10 +1,10 @@
-var blankWeather = '../images/backgrounds/blank.png';
-const sunnyClear = '../images/backgrounds/sunny-clear.png';
-const rainDrizzle = '../images/backgrounds/sunny-drizzle.png';
-const sunnyRain = '../images/backgrounds/sunny-rain.png';
-var cloudyClear = '../images/backgrounds/cloudy-clear.png';
-const snowy = '../images/backgrounds/snowy.png';
-const thunderStorm = '../images/backgrounds/thunder-storm.png';
+var blankWeather = '../assets/images/backgrounds/blank.png';
+const sunnyClear = '../assets/images/backgrounds/sunny-clear.png';
+const rainDrizzle = '../assets/images/backgrounds/sunny-drizzle.png';
+const sunnyRain = '../assets/images/backgrounds/sunny-rain.png';
+var cloudyClear = '../assets/images/backgrounds/cloudy-clear.png';
+const snowy = '../assets/images/backgrounds/snowy.png';
+const thunderStorm = '../assets/images/backgrounds/thunder-storm.png';
 thunderStorm2 = ''
 const weathers = {
   Clear: sunnyClear,
@@ -59,11 +59,11 @@ function changeWeather(startWeather, targetWeather) {
   }).appendTo('body').hide();
   // Define the image sources for the cloud animation
   const imageSources = [
-    '../images/animation/cloud1.png',
-    '../images/animation/cloud2.png',
-    '../images/animation/cloud3.png',
-    '../images/animation/cloud4.png',
-    '../images/animation/cloud5.png'
+    '../assets/images/animation/cloud1.png',
+    '../assets/images/animation/cloud2.png',
+    '../assets/images/animation/cloud3.png',
+    '../assets/images/animation/cloud4.png',
+    '../assets/images/animation/cloud5.png'
   ];
   // Create an array to store the loaded cloud images
   const images = [];
@@ -79,7 +79,7 @@ function changeWeather(startWeather, targetWeather) {
     // Load the cloud images and store them in the images array 
     imageSources.forEach((source, index) => {
       const img = new Image();
-      img.src = source;
+      img.src = window.location.pathname + source;
       img.onload = function() {
         images[index] = img;
         // Increment the load count and check if all images have been loaded
