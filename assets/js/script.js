@@ -5,11 +5,15 @@ $(window).on("load", function() {
   );
 
   function getAssetUrl(assetPath) {
-    console.log(baseDir);
-    console.log(baseDir + assetPath);
+
     return baseDir + assetPath;
   }
-
+  $('.gallery').flickity({
+    // options
+    cellAlign: 'center',
+    contain: true,
+    wrapAround: true
+  });
   const blankWeather = getAssetUrl("/assets/images/backgrounds/blank.png");
   const sunnyClear = getAssetUrl("/assets/images/backgrounds/sunny-clear.png");
   const rainDrizzle = getAssetUrl(
@@ -44,7 +48,7 @@ $(window).on("load", function() {
       Tornado:sunnyClear,
     }
   };
-
+  var tForecasts = [];
   var latitude;
   var longitude;
   var previousData = {};
@@ -52,53 +56,113 @@ $(window).on("load", function() {
   function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
-  function fetch5DayForecast(latitude, longitude) {
-    var apiForecastUrl =
-      "https://api.openweathermap.org/data/2.5/forecast?lat=" +
-      latitude +
-      "&lon=" +
-      longitude +
-      "&appid=" +
-      apiKey;
-  
-    // Make the API request
-    fetch(apiForecastUrl)
-      .then((response) => response.json())
-      .then((data) => {
-        if (data) {
-          console.log("5-day forecast:", data.list);
-          // Process the 5-day forecast data here
-  
-          // Create an empty object to store the aggregated data
-          let aggregatedData = {};
-  
-          data.list.forEach((forecast) => {
-            // Extract the date from the dt_txt field
-            let date = forecast.dt_txt.split(' ')[0];
-  
-            // If this date isn't in the aggregatedData object yet, add it with the current forecast's data
-            if (!aggregatedData[date]) {
-              aggregatedData[date] = [forecast];
-            } 
-            // If this date is already in the aggregatedData object, push the current forecast's data to it
-            else {
-              aggregatedData[date].push(forecast);
-            }
-          });
-          // You can process these to find the average temperature, humidity, etc. for each day
-          console.log("Aggregated data:", aggregatedData);
-          // for now, return a Promise that resolves to an empty object after 1 second
-          return aggregatedData
 
-        } 
-        else {
-          console.log("No results found for the specified location.");
+function display5DayForecast(forecasts) {
+  // Start with an empty string
+  let html = '';
+
+  // Loop through the forecasts array
+  forecasts.forEach((forecast) => {
+    // Format the date
+    let formattedDate = dayjs(forecast.date).format('MMM D');
+  
+    // Generate the URL for the weather icon
+    let iconUrl = `http://openweathermap.org/img/w/${forecast.icon}.png`;
+
+    // Add a 'forecast-card' div to the html string
+    html += `
+      <div class="forecast-card" style="background-image: url('${forecast.weatherImage}')">
+        <div class="forecast-date">${formattedDate}</div>
+        <div class="forecast-temp">${forecast.avgTemp}°F</div>
+        <div class="forecast-condition">${forecast.weatherCondition}</div>
+        <img src="${iconUrl}" alt="${forecast.weatherCondition}" class="weather-icon">
+      </div>
+    `;
+  });
+
+  // Add the html to the #forecast element
+  $('#forecast').html(html);
+}
+
+
+function fetch5DayForecast(latitude, longitude) {
+  console.log("testing fetch5DayForecast");
+  
+  var apiForecastUrl =
+    "https://api.openweathermap.org/data/2.5/forecast?lat=" +
+    latitude +
+    "&lon=" +
+    longitude +
+    "&appid=" +
+    apiKey;
+  
+  let aggregatedData = {};
+  let tForecasts = [];
+
+  fetch(apiForecastUrl)
+  .then((response) => response.json())
+  .then((data) => {   
+    if (data) {
+      data.list.forEach((forecast) => {
+        let date = forecast.dt_txt.split(' ')[0];
+
+        if (!aggregatedData[date]) {
+          aggregatedData[date] = {
+            temps: [forecast.main.temp],
+            icons: [forecast.weather[0].icon],
+            conditions: [forecast.weather[0].main]
+          };
+        } else {
+          aggregatedData[date].temps.push(forecast.main.temp);
+          aggregatedData[date].icons.push(forecast.weather[0].icon);
+          aggregatedData[date].conditions.push(forecast.weather[0].main);
         }
-      })
-      .catch((error) => {
-        console.log("API request failed. Error:", error);
       });
-  }
+
+      for (let date in aggregatedData) {
+        let temps = aggregatedData[date].temps;
+        let icons = aggregatedData[date].icons;
+        let conditions = aggregatedData[date].conditions;
+        let avgTempK = temps.reduce((a, b) => a + b, 0) / temps.length;
+        let avgTempF = Math.floor((avgTempK - 273.15) * 9/5 + 32);
+
+        // Find the most common weather condition and icon for the day
+        let mostCommonCondition = mode(conditions);
+        let mostCommonIcon = mode(icons);
+
+        // Add the condition to the filename for the background image
+        let weatherImage = weathers[mostCommonCondition];
+
+        tForecasts.push({
+          date: date,
+          avgTemp: avgTempF,
+          icon: mostCommonIcon,
+          weatherCondition: mostCommonCondition,
+          weatherImage: weatherImage
+        });
+      }
+
+      tForecasts = tForecasts.slice(0, 5);
+
+      display5DayForecast(tForecasts);
+    } else {
+      console.log("No results found for the specified location.");
+    }     
+  })
+  .catch((error) => {
+    console.log("API request failed. Error:", error);
+  });
+}
+
+// Helper function to find the most common element in an array
+function mode(array) {
+return array.sort((a, b) =>
+  array.filter(v => v === a).length -
+  array.filter(v => v === b).length
+).pop();
+}
+
+
 
   function determineWeather() {
     if (previousData === {}) {
@@ -109,7 +173,7 @@ $(window).on("load", function() {
     }
     let newWeather = currentData.weather[0].main;
     newWeather = weathers[newWeather];
-    console.log(newWeather);
+    // console.log(newWeather);
     changeWeather(oldWeather, newWeather);
   }
   // Create a function to change the weather background
@@ -162,14 +226,14 @@ $(window).on("load", function() {
           const img = new Image();
 
           img.src = baseDir + source;
-          console.log(img.src);
+          // console.log(img.src);
           img.onload = function () {
             images[index] = img;
             // Increment the load count and check if all images have been loaded
             loadCount++;
             // If all images have been loaded, start the cloud animation and resolve the promise
             if (loadCount === imageSources.length) {
-              console.log(images); // Debugging line
+              // console.log(images); // Debugging line
               startAnimation();
               resolve();
             }
@@ -183,8 +247,8 @@ $(window).on("load", function() {
     Promise.all([fadePromise])
       .then(() => {
         // Log a message when the background fade and image loading are complete
-        console.log("Background fade and image loading complete");
-        console.log(cityName);
+        // console.log("Background fade and image loading complete");
+        // console.log(cityName);
       })
       .catch((error) => {
         // Log an error if there was an error during the promise chain
@@ -281,7 +345,7 @@ $(window).on("load", function() {
           $(canvas).fadeOut(1000, function () {
             $(this).remove();
             // Log a message indicating that the animation has stopped
-            console.log("Animation stopped");
+            // console.log("Animation stopped");
           });
         } else {
           ctx.clearRect(0, 0, canvas[0].width, canvas[0].height);
@@ -302,48 +366,118 @@ $(window).on("load", function() {
   }
   //DEBUG: Call the changeWeather function with the startWeather and targetWeather as arguments
 
-  function addCityToGallery(cityWeather) {
-    // Check if the city already exists in the gallery
-    var existingCity = $(".gallery-cell").filter(function () {
-      return $(this).text().trim() === cityWeather.city;
-    });
+// Function that creates an empty card
+function createEmptyCard() {
+  var emptyGalleryCell = $("<div>Search a city to add</div>").addClass("gallery-cell empty-card");
+  emptyGalleryCell.css({
+    "background-size": "cover",
+    "background-repeat": "no-repeat",
+    "background-position": "center",
+  });
+  return emptyGalleryCell;
+}
 
-    if (existingCity.length > 0) {
-      // City already exists, do not add it again
-      return;
-    }
+function addCityToGallery(cityWeather) {
+  // Check if the city already exists in the gallery
+  var existingCity = $(".gallery-cell").filter(function () {
+    return $(this).text().trim() === cityWeather.city;
+  });
 
-    var galleryCell = $("<div>").addClass("gallery-cell");
-    galleryCell.css({
-      "background-image": `url(${cityWeather.weatherImage})`,
-      "background-size": "cover",
-      "background-repeat": "no-repeat",
-      "background-position": "center",
-    });
-
-    var cityName = $("<div>").addClass("city-name").text(cityWeather.city);
-    galleryCell.append(cityName);
-
-    var weatherCondition = $("<div>")
-      .addClass("weather-condition")
-      .text(cityWeather.weatherCondition);
-    galleryCell.append(weatherCondition);
-
-    galleryCell.on("click", function () {
-      // Handle click event, set the clicked city as the current city
-      cityName.addClass("current-city");
-      $(".city-name").not(cityName).removeClass("current-city");
-    });
-
-    $(".gallery").append(galleryCell);
-
-    // Reinitialize Flickity carousel
-    $(".gallery").flickity("destroy");
-    $(".gallery").flickity({
-      wrapAround: true,
-    });
+  if (existingCity.length > 0) {
+    // City already exists, do not add it again
+    return;
   }
 
+  var galleryCell = $("<div>").addClass("gallery-cell");
+  galleryCell.css({
+    "background-image": `url(${cityWeather.weatherImage})`,
+    "background-size": "cover",
+    "background-repeat": "no-repeat",
+    "background-position": "center",
+  });
+  galleryCell.on("click", function () {
+    // Check if the clicked card is an empty card
+    if ($(this).hasClass("empty-card")) {
+      // It's an empty card, ignore the click event
+      return;
+    }
+  
+    // Set the clicked city as the current city
+    cityName.addClass("current-city");
+    $(".city-name").not(cityName).removeClass("current-city");
+  
+    // Update currentCity and fetch weather data for the selected city
+    currentCity = cityWeather.city;
+    weatherFetch(currentCity);
+  });
+  var cityName = $("<div>").addClass("city-name").text(cityWeather.city);
+  galleryCell.append(cityName);
+
+  var weatherCondition = $("<div>")
+    .addClass("weather-condition")
+    .text(cityWeather.weatherCondition);
+  galleryCell.append(weatherCondition);
+
+  galleryCell.on("click", function () {
+    // Handle click event, set the clicked city as the current city
+    cityName.addClass("current-city");
+    $(".city-name").not(cityName).removeClass("current-city");
+  });
+
+  var emptyCard = $(".empty-card").first();
+  if (emptyCard.length > 0) {
+    // Replace the first empty card with the new card
+    emptyCard.replaceWith(galleryCell);
+  } else {
+    // Append the new card to the gallery
+    $(".gallery").append(galleryCell);
+  }
+
+  // Check if the total number of cards is less than the minimum
+  var minCards = 7;  // Set the minimum number of cards
+  var totalCards = $(".gallery-cell").length;
+  while (totalCards < minCards) {
+    // Add empty cards until the minimum is reached
+    $(".gallery").append(createEmptyCard());
+    totalCards++;
+  }
+
+  // Reinitialize Flickity carousel
+  $(".gallery").flickity("destroy");
+  $('.gallery').flickity({
+    // options
+    cellAlign: 'center',
+    contain: true,
+    wrapAround: true,
+    draggable: false
+  })
+  .on( 'staticClick', function( event, pointer, cellElement, cellIndex ) {
+    if (!cellElement) {
+      return;
+    }
+    let cityName = $(cellElement).find(".city-name").text().trim();
+    console.log(cityName);  // Check the clicked city name
+    
+    // Set the clicked city as the current city
+    $(".city-name.current-city").removeClass("current-city");
+    $(cellElement).find(".city-name").addClass("current-city");
+  
+    // set the currentCity variable
+    currentCity = cityName;
+  
+    // run the weather change function
+    setCity(cityName);
+    weatherFetch();
+  });
+}
+// Get the user's current position
+navigator.geolocation.getCurrentPosition(function(position) {
+  var latitude = position.coords.latitude;
+  var longitude = position.coords.longitude;
+
+  // Use the latitude and longitude to fetch weather
+  fetchWeatherByLocation(latitude, longitude);
+});
   var apiKey = "81fba63bc262d8384351efd1abd18569";
   var cityName = "Minneapolis";
 
@@ -360,16 +494,16 @@ $(window).on("load", function() {
     fetch(apiLocationUrl)
       .then((response) => response.json())
       .then((data) => {
-        console.log("API Location Response:", data);
+        // console.log("API Location Response:", data);
         // Handle the API response
         if (data.length > 0) {
           var latitude = data[0].lat;
           var longitude = data[0].lon;
-          console.log("Latitude:", latitude);
-          console.log("Longitude:", longitude);
+          // console.log("Latitude:", latitude);
+          // console.log("Longitude:", longitude);
 
           fetch5DayForecast(latitude, longitude);
-
+          console.log("tempforecasts: ",tForecasts)
           var apiWeatherUrl =
             "https://api.openweathermap.org/data/2.5/weather?lat=" +
             latitude +
@@ -382,10 +516,10 @@ $(window).on("load", function() {
           fetch(apiWeatherUrl)
             .then((response) => response.json())
             .then((data) => {
-              console.log("API Weather Response:", data);
+              // console.log("API Weather Response:", data);
               // Handle the API response
               if (data) {
-                console.log("description", data)
+                // console.log("description", data)
                 let condition = data.weather[0].main;
                 
                 let imageFileName;
@@ -450,7 +584,7 @@ $(window).on("load", function() {
       cityName = toSearch;
       try {
         weatherFetch();
-        console.log("working!")
+        // console.log("working!")
       } catch (error) {
         console.log("No city found!");
       }
@@ -475,38 +609,35 @@ $(window).on("load", function() {
   });
 
   // Reinitialize Flickity carousel
-  $(".gallery").flickity("destroy");
-  $(".gallery").flickity({
-    wrapAround: true,
-  });
-  setTimeout(() => {
-    cityName = "Miami"
-    weatherFetch();
-  }, 300);
-  setTimeout(() => {
-    cityName = "Seattle"
-    weatherFetch();
-  }, 350);
-  setTimeout(() => {
-    cityName = "Los Angeles"
-    weatherFetch();
-  }, 400);
-  setTimeout(() => {
-    cityName = "Chicago"
-    weatherFetch();
-  }, 450);
-  setTimeout(() => {
-    cityName = "New York"
-    weatherFetch();
-  }, 500);
-  setTimeout(() => {
-    cityName = "Honolulu"
-    weatherFetch();
-  }, 550);
+
+  // setTimeout(() => {
+  //   cityName = "Miami"
+  //   weatherFetch();
+  // }, 150);
+  // setTimeout(() => {
+  //   cityName = "Seattle"
+  //   weatherFetch();
+  // }, 250);
+  // setTimeout(() => {
+  //   cityName = "Los Angeles"
+  //   weatherFetch();
+  // }, 400);
+  // setTimeout(() => {
+  //   cityName = "Chicago"
+  //   weatherFetch();
+  // }, 450);
+  // setTimeout(() => {
+  //   cityName = "New York"
+  //   weatherFetch();
+  // }, 500);
+  // setTimeout(() => {
+  //   cityName = "Honolulu"
+  //   weatherFetch();
+  // }, 550);
   setTimeout(() => {
     cityName = "Minneapolis"
     weatherFetch();
-  }, 600);
+  }, 200);
   }
 )
 

@@ -30,11 +30,17 @@ body {
   min-width: var(--forecast-minwidth);
   height: var(--forecast-height);
   background-color: var(--forecast-bkgcolor);
+  margin-right: var(--forecast-marginright)
 }
 .forecast-card {
   background-color: var(--forecast-card-bkgcolor);
-  min-width: var(--forecast-card-minwidth)
+  min-width: var(--forecast-card-minwidth);
+  height: var(--forecast-card-height);
+  margin: var(--forecast-card-margin);
+  padding: var(--forecast-card-padding);
+  background-image: cover;
 }
+
 header {
   justify-self: stretch;
   width: var(--header-width);
@@ -93,6 +99,7 @@ h1{
 #navigation {
   display:flex;
   flex-direction: column;
+  margin-left: var(--navigation-marginleft)
 }
 
 #canvas {
@@ -177,7 +184,6 @@ h1{
   height: var(--gallery-height);
   background-color: var(--gallery-bkgcolor);
   border-radius: var(--gallery-border-radius);
-  justify-content: center;
 }
 
 
@@ -192,7 +198,7 @@ h1{
 /* 
 cell number */ */
 .gallery-cell:before {
-  display: block;
+
   text-align: center;
   content: counter(gallery-cell);
   line-height: var(--gallerycell-lineheight);

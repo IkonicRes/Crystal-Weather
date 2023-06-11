@@ -7,7 +7,7 @@
         --forecast-card-bkgcolor: red;
         --searchinput-bkgcolor: #ffffff56;
         --gallery-bkgcolor: rgba(0, 0, 0, .307);
-        --gallerycell-bkgcolor: rgba(0, 0, 0, 0.504);
+        --gallerycell-bkgcolor: rgba(73, 73, 73, 0.504);
         /* TEXT COLORS */
         --main-text-color: rgb(0, 221, 255);
         --searchinput-text-color: whitesmoke;
@@ -38,8 +38,9 @@
         --forecast-minwidth: 15vw;
         --forecast-height: 100vh;
         --forecast-card-minwidth: 100%;
+        --forecast-card-height: 18vh;
         --header-width: 90vw;
-        --selection-width: 85vw;
+        --selection-width: 80vw;
         --selection-height: 95vh;
         --content-minwidth: 50%;
         --search-height: 3rem;
@@ -58,7 +59,7 @@
     /* SPACING */
         --crystalball-paddingtop: .1rem;
         --h1-padding: .2vw;
-        --title-header-marginleft: 27vw;
+        --title-header-marginleft: 32vw;
         --info-marginright: 1vw;
         --info-display-margin: 1vw 0 0 15vw;
         --search-margin: auto auto 1vw auto;
@@ -69,7 +70,10 @@
         --searchinput-hover-marginleft: 13px;
         --search-focuswithin-padding: .8vw;
         --search-focuswithin-marginleft: 13px;
-        --gallerycell-padding: 1vw 0 0 1vw;
+        --gallerycell-padding: 20px;
+        --forecast-card-margin: .5vw 0 .5vw .5vw;
+        --forecast-card-padding: .4vw 0 0 .4vw;
+        --navigation-marginleft: 5vw;
     /* BORDERS */
         --h1-bordersize: .15vw;
         --h1-border-radius: 2rem;
