@@ -6,19 +6,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Merriweather">
     <link rel="stylesheet" href="./assets/css/reset.css">
+    <link rel="stylesheet" href="./assets/css/flickity.css" media="screen">
     <link rel="stylesheet" href="./assets/css/root.css">
     <link rel="stylesheet" href="./assets/css/style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    
     <title>Crystal Weather App</title>
 </head>
 <body>
     <canvas id="canvas"></canvas>
     <main id="content">
-        <h1>Crystal🔮Weather</h1>
-        <section id="search">        
-            <input id="search-bar" type="text" placeholder="            Search for a city">
+        <section id="page">
+            <aside id="forecast">asdfasdf</aside>
+            <section id="selection">
+                <header>
+                    <section id="title-header">
+                        <h1>Crystal <img id="crystal-ball" src="" alt="Crystal Ball"> Weather</h1>
+                    </section>
+                    <div id="info-display">
+                    </div>
+                </header>
+                <section id="navigation">
+                    <section id="search">       
+                        <input id="search-bar" type="text" placeholder="Search for a city">  
+                    </section>
+                    <nav>
+                        <div class="gallery js-flickity" data-flickity-options='{ "wrapAround": true }'>
+                        </div>
+                    </nav>
+                </section>
+            </section>
         </section>
     </main>
+        <script src="./assets/js/flickity.js"></script>
     <script src="./assets/js/script.js"></script>
+
 </body>
 </html>

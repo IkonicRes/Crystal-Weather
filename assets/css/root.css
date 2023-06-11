@@ -2,21 +2,81 @@
     /* COLORS */
         /* BACKGROUND COLORS */
         --menu-bkgcolor: black;
+        --h1-bkgcolor: rgba(0, 0, 0, 0.168);
+        --forecast-bkgcolor: rgba(0, 0, 0, 0.226);
+        --forecast-card-bkgcolor: red;
+        --searchinput-bkgcolor: #ffffff56;
+        --gallery-bkgcolor: rgba(0, 0, 0, .307);
+        --gallerycell-bkgcolor: rgba(0, 0, 0, 0.504);
         /* TEXT COLORS */
-        --main-text-color: rgb(0, 177, 204);
+        --main-text-color: rgb(0, 221, 255);
+        --searchinput-text-color: whitesmoke;
+        --gallerycell-text-color: whitesmoke;
         /* SHADOW COLORS */
-        --shadowcolor: rgb(255, 255, 255);
+        --shadowcolor: rgba(71, 71, 71, 0.605);
+        --info-shadowcolor: rgba(61, 61, 61, 0.39);
     /* TEXT EFFECTS */
         --base-textshadow: -1px 1px 1px var(--shadowcolor),
         1px 1px 1px var(--shadowcolor),
         -1px -1px 1px var(--shadowcolor),
         1px -1px 1px var(--shadowcolor);
+        --info-textshadow: -1px 1px 1px var(--info-shadowcolor),
+        1px 1px 1px var(--info-shadowcolor),
+        -1px -1px 1px var(--info-shadowcolor),
+        1px -1px 1px var(--shadowcolor);
+        --searchinput-hover-opacity: 1;
+        --search-focuswithin-opacity: 1;
+        --gallerycell-lineheight: 200px;
     /* SIZES  */
-        --h1-textsize: 4vw;
+        --h1-textsize: 2vw;
+        --searchinput-textsize: 0;
+        --searchinput-hover-textsize: 1rem;
+        --search-focuswithin-textsize: 1rem;
+        --gallerycell-textsize: .5vw;
+        --crystalball-height: 2vw;
+        --h1-width: 20vw;
+        --forecast-minwidth: 15vw;
+        --forecast-height: 100vh;
+        --forecast-card-minwidth: 100%;
+        --header-width: 90vw;
+        --selection-width: 85vw;
+        --selection-height: 95vh;
+        --content-minwidth: 50%;
+        --search-height: 3rem;
+        --search-minwidth: 3rem;
+        --search-minheight: 5rem;
+        --searchinput-hover-width: calc(100% - 2.25rem);
+        --searchinput-hover-maxheight: 5rem;
+        --searchinput-hover-height: 2rem;
+        --search-focuswithin-width: calc(100% - 2.3rem);
+        --search-focuswithin-maxheight: 5rem;
+        --search-focuswithin-height: 2rem;
+        --gallery-width: 75vw;
+        --gallery-height: 15vh;
+        --gallerycell-width: 12vw;
+        --gallerycell-height: 15vh;
     /* SPACING */
-        --h1-margintop: 25vh;
+        --crystalball-paddingtop: .1rem;
+        --h1-padding: .2vw;
+        --title-header-marginleft: 27vw;
+        --info-marginright: 1vw;
+        --info-display-margin: 1vw 0 0 15vw;
+        --search-margin: auto auto 1vw auto;
+        --search-paddingleft: 2.25rem;
+        --searchinput-margin: auto 0 auto 0;
+        --searchinput-padding: .2vw;
+        --searchinput-hover-padding: .8vw auto auto var(--search-paddingleft);
+        --searchinput-hover-marginleft: 13px;
+        --search-focuswithin-padding: .8vw;
+        --search-focuswithin-marginleft: 13px;
+        --gallerycell-padding: 1vw 0 0 1vw;
     /* BORDERS */
-
+        --h1-bordersize: .15vw;
+        --h1-border-radius: 2rem;
+        --searchinput-border-radius: 50px;
+        --searchinput-hover-border: 1px solid rgba(129, 129, 129, 0.656);
+        --search-focuswithin-border:  1px solid rgba(0, 213, 255, 0.656);
+        --gallery-border-radius: 15px;
     /* TRANSFORM */
-
+    
 }
