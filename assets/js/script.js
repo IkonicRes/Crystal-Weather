@@ -1,5 +1,5 @@
 $(window).on("load", function () {
-  const baseDir = window.location.pathname;
+  const baseDir = window.location.pathname.substring(0, window.location.lastIndexOf("/"));
   
 
   function getAssetUrl(assetPath) {
