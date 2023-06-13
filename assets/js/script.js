@@ -1,14 +1,15 @@
+ const baseDir = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port +"/index.html"
+ function getAssetUrl(assetPath) {
+  path = baseDir + assetPath
+  console.log("🚀 ~ file: script.js:9 ~ getAssetUrl ~ assetPath:", assetPath)
+  console.log("🚀 ~ file: script.js:10 ~ getAssetUrl ~ path:", path)
+  console.log("🚀 ~ file: script.js:11 ~ getAssetUrl ~ baseDir:", baseDir)
+  return path}
 $(window).on("load", function () {
-  const baseDir = window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/"));
+ 
   
 
-  function getAssetUrl(assetPath) {
-    path = baseDir + assetPath
-    console.log("🚀 ~ file: script.js:9 ~ getAssetUrl ~ assetPath:", assetPath)
-    console.log("🚀 ~ file: script.js:10 ~ getAssetUrl ~ path:", path)
-    console.log("🚀 ~ file: script.js:11 ~ getAssetUrl ~ baseDir:", baseDir)
-    return path}
-    console.log("🚀 ~ file: script.js:11 ~ getAssetUrl ~ baseDir:", baseDir)
+
     
   
   // INITALIZE GALLERY
@@ -207,11 +208,11 @@ $(window).on("load", function () {
       .hide();
     // Define the image sources for the cloud animation
     const imageSources = [
-      getAssetUrl("/assets/images/animation/cloud1.png"),
-      getAssetUrl("/assets/images/animation/cloud2.png"),
-      getAssetUrl("/assets/images/animation/cloud3.png"),
-      getAssetUrl("/assets/images/animation/cloud4.png"),
-      getAssetUrl("/assets/images/animation/cloud5.png"),
+      ("../assets/images/animation/cloud1.png"),
+      ("../assets/images/animation/cloud2.png"),
+      ("../assets/images/animation/cloud3.png"),
+      ("../assets/images/animation/cloud4.png"),
+      ("../assets/images/animation/cloud5.png"),
     ];
     // Create an array to store the loaded cloud images
     const images = [];
@@ -232,8 +233,8 @@ $(window).on("load", function () {
         // Load the cloud images and store them in the images array
         imageSources.forEach((source, index) => {
           const img = new Image();
-
-          img.src = baseDir + source;
+          console.log(source)
+          img.src = source;
           // console.log(img.src);
           img.onload = function () {
             images[index] = img;
