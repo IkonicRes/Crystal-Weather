@@ -208,11 +208,11 @@ $(window).on("load", function () {
       .hide();
     // Define the image sources for the cloud animation
     const imageSources = [
-      ("/assets/images/animation/cloud1.png"),
-      ("/assets/images/animation/cloud2.png"),
-      ("/assets/images/animation/cloud3.png"),
-      ("/assets/images/animation/cloud4.png"),
-      ("/assets/images/animation/cloud5.png"),
+      getAssetUrl("/assets/images/animation/cloud1.png"),
+      getAssetUrl("/assets/images/animation/cloud2.png"),
+      getAssetUrl("/assets/images/animation/cloud3.png"),
+      getAssetUrl("/assets/images/animation/cloud4.png"),
+      getAssetUrl("/assets/images/animation/cloud5.png"),
     ];
     // Create an array to store the loaded cloud images
     const images = [];
