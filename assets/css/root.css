@@ -37,7 +37,7 @@
         --h1-width: 20vw;
         --forecast-minwidth: 15vw;
         --forecast-height: 100vh;
-        --forecast-card-minwidth: 100%;
+        --forecast-card-minwidth: 90%;
         --forecast-card-height: 18vh;
         --header-width: 90vw;
         --selection-width: 80vw;
@@ -55,7 +55,7 @@
         --gallery-width: 75vw;
         --gallery-height: 15vh;
         --gallerycell-width: 12vw;
-        --gallerycell-height: 15vh;
+        --gallerycell-height: 11vh;
     /* SPACING */
         --crystalball-paddingtop: .1rem;
         --h1-padding: .2vw;
@@ -71,7 +71,7 @@
         --search-focuswithin-padding: .8vw;
         --search-focuswithin-marginleft: 13px;
         --gallerycell-padding: 20px;
-        --forecast-card-margin: .5vw 0 .5vw .5vw;
+        --forecast-card-margin: .5vw .5vw .5vw .5vw;
         --forecast-card-padding: .4vw 0 0 .4vw;
         --navigation-marginleft: 5vw;
     /* BORDERS */

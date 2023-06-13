@@ -1,35 +1,26 @@
-$(window).on("load", function() {
-  const baseDir = window.location.pathname.substring(
-    0,
-    window.location.pathname.lastIndexOf("/")
-  );
-
-  function getAssetUrl(assetPath) {
-
-    return baseDir + assetPath;
-  }
-  $('.gallery').flickity({
-    // options
-    cellAlign: 'center',
+$(window).on("load", function () {
+  const baseDir = window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/"));
+  
+  function getAssetUrl(assetPath) { return baseDir + assetPath; }
+  
+  // INITALIZE GALLERY
+  $(".gallery").flickity({
+    cellAlign: "center",
     contain: true,
-    wrapAround: true
+    wrapAround: true,
   });
+
   const blankWeather = getAssetUrl("/assets/images/backgrounds/blank.png");
   const sunnyClear = getAssetUrl("/assets/images/backgrounds/sunny-clear.png");
-  const rainDrizzle = getAssetUrl(
-    "/assets/images/backgrounds/sunny-drizzle.png"
-  );
+  const rainDrizzle = getAssetUrl("/assets/images/backgrounds/sunny-drizzle.png");
   const sunnyRain = getAssetUrl("/assets/images/backgrounds/sunny-rain.png");
-  const cloudyClear = getAssetUrl(
-    "/assets/images/backgrounds/cloudy-clear.png"
-  );
+  const cloudyClear = getAssetUrl("/assets/images/backgrounds/cloudy-clear.png");
   const snowy = getAssetUrl("/assets/images/backgrounds/snowy.png");
-  const thunderStorm = getAssetUrl(
-    "/assets/images/backgrounds/thunder-storm.png"
-  );
-  thunderStorm2 = "";
+  const thunderStorm = getAssetUrl("/assets/images/backgrounds/thunder-storm.png");
+  
 
   const weathers = {
+    Blank: blankWeather,
     Clear: sunnyClear,
     Clouds: cloudyClear,
     Rain: sunnyRain,
@@ -37,147 +28,154 @@ $(window).on("load", function() {
     Drizzle: rainDrizzle,
     Thunderstorm: thunderStorm,
     Atmosphere: {
-      Mist:sunnyClear,
-      Smoke:sunnyClear,
-      Haze:sunnyClear,
-      Dust:sunnyClear,
-      Fog:sunnyClear,
-      Sand:sunnyClear,
-      Ash:sunnyClear,
-      Squall:sunnyClear,
-      Tornado:sunnyClear,
-    }
+      Mist: sunnyClear,
+      Smoke: sunnyClear,
+      Haze: sunnyClear,
+      Dust: sunnyClear,
+      Fog: sunnyClear,
+      Sand: sunnyClear,
+      Ash: sunnyClear,
+      Squall: sunnyRain,
+      Tornado: cloudyClear,
+    },
   };
   var tForecasts = [];
   var latitude;
   var longitude;
-  var previousData = {};
-  var currentData = {};
+  var oldWeather;
+  var newWeather;
+  var apiKey = "81fba63bc262d8384351efd1abd18569";
+  var cityName = "Minneapolis";
+  var cityCountry = "US"
+  var previousData = "Clear";
+  var currentData = "Clear";
   function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
-}
-
-function display5DayForecast(forecasts) {
-  // Start with an empty string
-  let html = '';
-
-  // Loop through the forecasts array
-  forecasts.forEach((forecast) => {
-    // Format the date
-    let formattedDate = dayjs(forecast.date).format('MMM D');
+  }
+  function display5DayForecast(forecasts) {
+    let forecastHeader = "<h2 id='forecast-header'>5 Day " + cityName + " Forecast</h2>";
+    $("#forecast").html(forecastHeader)
+    // Start with an empty string
+    let html = "";
+    
+    // Loop through the forecasts array
+    forecasts.forEach((forecast) => {
+      // Format the date
+      let formattedDate = dayjs(forecast.date).format("MMM D");
   
-    // Generate the URL for the weather icon
-    let iconUrl = `http://openweathermap.org/img/w/${forecast.icon}.png`;
-
-    // Add a 'forecast-card' div to the html string
-    html += `
-      <div class="forecast-card" style="background-image: url('${forecast.weatherImage}')">
-        <div class="forecast-date">${formattedDate}</div>
-        <div class="forecast-temp">${forecast.avgTemp}°F</div>
-        <div class="forecast-condition">${forecast.weatherCondition}</div>
-        <img src="${iconUrl}" alt="${forecast.weatherCondition}" class="weather-icon">
-      </div>
-    `;
-  });
-
-  // Add the html to the #forecast element
-  $('#forecast').html(html);
-}
-
-
-function fetch5DayForecast(latitude, longitude) {
-  console.log("testing fetch5DayForecast");
+      // Generate the URL for the weather icon
+      let iconUrl = `http://openweathermap.org/img/w/${forecast.icon}.png`;
+      // Add a 'forecast-card' div to the html string
+      html += `
+        <div class="forecast-card" style="background-image: url('${forecast.weatherImage}')">
+          <div class="forecast-date">${formattedDate}</div>
+          <div class="forecast-temp">${forecast.avgTemp}°F</div>
+          <div class="forecast-condition">${forecast.weatherCondition}</div>
+          <div class="forecast-humidity">Humidity: ${forecast.humidity}%</div>
+          <div class="forecast-wind">Wind Speed: ${forecast.windSpeed} m/s</div>
+          <img src="${iconUrl}" alt="${forecast.weatherCondition}" class="weather-icon">
+        </div>
+      `;
+    });
   
-  var apiForecastUrl =
-    "https://api.openweathermap.org/data/2.5/forecast?lat=" +
-    latitude +
-    "&lon=" +
-    longitude +
-    "&appid=" +
-    apiKey;
+    // Add the html to the #forecast element
+    $("#forecast").append(html);
+  }
   
-  let aggregatedData = {};
-  let tForecasts = [];
+  function fetch5DayForecast(latitude, longitude) {
+    console.log("testing fetch5DayForecast");
 
-  fetch(apiForecastUrl)
-  .then((response) => response.json())
-  .then((data) => {   
-    if (data) {
-      data.list.forEach((forecast) => {
-        let date = forecast.dt_txt.split(' ')[0];
+    var apiForecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${apiKey}`;
+    let aggregatedData = {};
+    let tForecasts = [];
 
-        if (!aggregatedData[date]) {
-          aggregatedData[date] = {
-            temps: [forecast.main.temp],
-            icons: [forecast.weather[0].icon],
-            conditions: [forecast.weather[0].main]
-          };
+    fetch(apiForecastUrl)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data) {
+          data.list.forEach((forecast) => {
+            let date = forecast.dt_txt.split(" ")[0];
+
+            if (!aggregatedData[date]) {
+              aggregatedData[date] = {
+                temps: [forecast.main.temp],
+                icons: [forecast.weather[0].icon],
+                conditions: [forecast.weather[0].main],
+                humidities: [forecast.main.humidity],
+                windSpeeds: [forecast.wind.speed]
+              };
+            } else {
+              aggregatedData[date].temps.push(forecast.main.temp);
+              aggregatedData[date].icons.push(forecast.weather[0].icon);
+              aggregatedData[date].conditions.push(forecast.weather[0].main);
+              aggregatedData[date].humidities.push(forecast.main.humidity);
+              aggregatedData[date].windSpeeds.push(forecast.wind.speed);
+            }
+          });
+
+          for (let date in aggregatedData) {
+            let temps = aggregatedData[date].temps;
+            let icons = aggregatedData[date].icons;
+            let conditions = aggregatedData[date].conditions;
+            let humidities = aggregatedData[date].humidities;
+            let windSpeeds = aggregatedData[date].windSpeeds;
+            let avgTempK = temps.reduce((a, b) => a + b, 0) / temps.length;
+            let avgTempF = Math.floor(((avgTempK - 273.15) * 9) / 5 + 32);
+
+            // Find the most common weather condition and icon for the day
+            let mostCommonCondition = mode(conditions);
+            let mostCommonIcon = mode(icons);
+            let avgHumidity = Math.round(humidities.reduce((a, b) => a + b, 0) / humidities.length);
+            let avgWindSpeed = Math.round(windSpeeds.reduce((a, b) => a + b, 0) / windSpeeds.length * 10) / 10; // Round to 1 decimal place
+
+            // Add the condition to the filename for the background image
+            let weatherImage = weathers[mostCommonCondition];
+
+            tForecasts.push({
+              date: date,
+              avgTemp: avgTempF,
+              icon: mostCommonIcon,
+              weatherCondition: mostCommonCondition,
+              weatherImage: weatherImage,
+              humidity: avgHumidity,
+              windSpeed: avgWindSpeed,
+            });
+          }
+
+          tForecasts = tForecasts.slice(0, 5);
+
+          display5DayForecast(tForecasts);
         } else {
-          aggregatedData[date].temps.push(forecast.main.temp);
-          aggregatedData[date].icons.push(forecast.weather[0].icon);
-          aggregatedData[date].conditions.push(forecast.weather[0].main);
+          console.log("No results found for the specified location.");
         }
+      })
+      .catch((error) => {
+        console.log("API request failed. Error:", error);
       });
-
-      for (let date in aggregatedData) {
-        let temps = aggregatedData[date].temps;
-        let icons = aggregatedData[date].icons;
-        let conditions = aggregatedData[date].conditions;
-        let avgTempK = temps.reduce((a, b) => a + b, 0) / temps.length;
-        let avgTempF = Math.floor((avgTempK - 273.15) * 9/5 + 32);
-
-        // Find the most common weather condition and icon for the day
-        let mostCommonCondition = mode(conditions);
-        let mostCommonIcon = mode(icons);
-
-        // Add the condition to the filename for the background image
-        let weatherImage = weathers[mostCommonCondition];
-
-        tForecasts.push({
-          date: date,
-          avgTemp: avgTempF,
-          icon: mostCommonIcon,
-          weatherCondition: mostCommonCondition,
-          weatherImage: weatherImage
-        });
-      }
-
-      tForecasts = tForecasts.slice(0, 5);
-
-      display5DayForecast(tForecasts);
-    } else {
-      console.log("No results found for the specified location.");
-    }     
-  })
-  .catch((error) => {
-    console.log("API request failed. Error:", error);
-  });
-}
-
-// Helper function to find the most common element in an array
-function mode(array) {
-return array.sort((a, b) =>
-  array.filter(v => v === a).length -
-  array.filter(v => v === b).length
-).pop();
-}
+  } 
 
 
+  // Helper function to find the most common element in an array
+  function mode(array) {
+    return array
+      .sort(
+        (a, b) =>
+          array.filter((v) => v === a).length -
+          array.filter((v) => v === b).length
+      )
+      .pop();
+  }
 
   function determineWeather() {
-    if (previousData === {}) {
-      let oldWeather = previousData.weather[0].main;
-      oldWeather = weathers[oldWeather];
-    } else {
-      oldWeather = blankWeather;
-    }
-    let newWeather = currentData.weather[0].main;
-    newWeather = weathers[newWeather];
-    // console.log(newWeather);
+    oldWeather = weathers[previousData];
+    newWeather = weathers[currentData];
+    console.log(previousData);
+    console.log(currentData);
     changeWeather(oldWeather, newWeather);
   }
   // Create a function to change the weather background
   function changeWeather(startWeather, targetWeather) {
+    console.log("[Change Weather] Started.");
     startWeather = baseDir + startWeather;
     targetWeather = baseDir + targetWeather;
     // Create a temporary background element with the startWeather image
@@ -262,7 +260,7 @@ return array.sort((a, b) =>
         left: 0,
         width: "100%",
         height: "100%",
-        "z-index": -1,
+        "z-index": 0,
         // Append the canvas to the body
       })
       .appendTo("body");
@@ -366,200 +364,166 @@ return array.sort((a, b) =>
   }
   //DEBUG: Call the changeWeather function with the startWeather and targetWeather as arguments
 
-// Function that creates an empty card
-function createEmptyCard() {
-  var emptyGalleryCell = $("<div>Search a city to add</div>").addClass("gallery-cell empty-card");
-  emptyGalleryCell.css({
-    "background-size": "cover",
-    "background-repeat": "no-repeat",
-    "background-position": "center",
-  });
-  return emptyGalleryCell;
-}
+  // Function that creates an empty card
+  function createEmptyCard() {
+    var emptyGalleryCell = $("<div>Search a city to add</div>").addClass("gallery-cell empty-card");
+    emptyGalleryCell.css({
+      "background-size": "cover",
+      "background-repeat": "no-repeat",
+      "background-position": "center",
+    });
+    return emptyGalleryCell;
+  }
 
-function addCityToGallery(cityWeather) {
-  // Check if the city already exists in the gallery
-  var existingCity = $(".gallery-cell").filter(function () {
-    return $(this).text().trim() === cityWeather.city;
-  });
+  function addCityToGallery(cityWeather) {
+    console.log(cityWeather)
+    // Check if the city already exists in the gallery
+    var existingCity = $(".gallery-cell").filter(function () { return $(this).text().trim().split("").filter(char => /^[a-zA-Z]+(-[a-zA-Z]+)*$/.test(char)) === cityWeather.city; });
 
-  if (existingCity.length > 0) {
     // City already exists, do not add it again
-    return;
-  }
+    if (existingCity.length > 0) { return; }
 
-  var galleryCell = $("<div>").addClass("gallery-cell");
-  galleryCell.css({
-    "background-image": `url(${cityWeather.weatherImage})`,
-    "background-size": "cover",
-    "background-repeat": "no-repeat",
-    "background-position": "center",
-  });
-  galleryCell.on("click", function () {
-    // Check if the clicked card is an empty card
-    if ($(this).hasClass("empty-card")) {
+    var galleryCell = $("<div>").addClass("gallery-cell");
+    galleryCell.css({
+      "background-image": `url(${cityWeather.weatherImage})`,
+      "background-size": "cover",
+      "background-repeat": "no-repeat",
+      "background-position": "center",
+    });
+    galleryCell.on("click", function () {
+      // Check if the clicked card is an empty card
       // It's an empty card, ignore the click event
-      return;
+      if ($(this).hasClass("empty-card")) { return; }
+
+      // Set the clicked city as the current city
+      $(".city-name").addClass("current-city");
+      $(".city-name").not(cityName).removeClass("current-city");
+
+      // Update currentCity and fetch weather data for the selected city
+      cityName = cityWeather.city;
+      weatherFetch();
+    });
+    var cityDiv = $("<div>").addClass("city-name").text(`${cityWeather.city}, ${cityWeather.country}`);
+    galleryCell.append(cityDiv);
+
+    var weatherCondition = $("<div>").addClass("weather-condition").text(cityWeather.weatherCondition);
+    galleryCell.append(weatherCondition);
+
+    var emptyCard = $(".empty-card").first();
+    if (emptyCard.length > 0) {
+      // Replace the first empty card with the new card
+      emptyCard.replaceWith(galleryCell);
+    } else {
+      // Append the new card to the gallery
+      $(".gallery").append(galleryCell);
     }
-  
-    // Set the clicked city as the current city
-    cityName.addClass("current-city");
-    $(".city-name").not(cityName).removeClass("current-city");
-  
-    // Update currentCity and fetch weather data for the selected city
-    currentCity = cityWeather.city;
-    weatherFetch(currentCity);
-  });
-  var cityName = $("<div>").addClass("city-name").text(cityWeather.city);
-  galleryCell.append(cityName);
 
-  var weatherCondition = $("<div>")
-    .addClass("weather-condition")
-    .text(cityWeather.weatherCondition);
-  galleryCell.append(weatherCondition);
-
-  galleryCell.on("click", function () {
-    // Handle click event, set the clicked city as the current city
-    cityName.addClass("current-city");
-    $(".city-name").not(cityName).removeClass("current-city");
-  });
-
-  var emptyCard = $(".empty-card").first();
-  if (emptyCard.length > 0) {
-    // Replace the first empty card with the new card
-    emptyCard.replaceWith(galleryCell);
-  } else {
-    // Append the new card to the gallery
-    $(".gallery").append(galleryCell);
-  }
-
-  // Check if the total number of cards is less than the minimum
-  var minCards = 7;  // Set the minimum number of cards
-  var totalCards = $(".gallery-cell").length;
-  while (totalCards < minCards) {
-    // Add empty cards until the minimum is reached
-    $(".gallery").append(createEmptyCard());
-    totalCards++;
-  }
-
-  // Reinitialize Flickity carousel
-  $(".gallery").flickity("destroy");
-  $('.gallery').flickity({
-    // options
-    cellAlign: 'center',
-    contain: true,
-    wrapAround: true,
-    draggable: false
-  })
-  .on( 'staticClick', function( event, pointer, cellElement, cellIndex ) {
-    if (!cellElement) {
-      return;
+    // Check if the total number of cards is less than the minimum
+    var minCards = 7; // Set the minimum number of cards
+    var totalCards = $(".gallery-cell").length;
+    while (totalCards < minCards) {
+      // Add empty cards until the minimum is reached
+      $(".gallery").append(createEmptyCard());
+      totalCards++;
     }
-    let cityName = $(cellElement).find(".city-name").text().trim();
-    console.log(cityName);  // Check the clicked city name
-    
-    // Set the clicked city as the current city
-    $(".city-name.current-city").removeClass("current-city");
-    $(cellElement).find(".city-name").addClass("current-city");
-  
-    // set the currentCity variable
-    currentCity = cityName;
-  
-    // run the weather change function
-    setCity(cityName);
-    weatherFetch();
-  });
-}
-// Get the user's current position
-navigator.geolocation.getCurrentPosition(function(position) {
-  var latitude = position.coords.latitude;
-  var longitude = position.coords.longitude;
 
-  // Use the latitude and longitude to fetch weather
-  fetchWeatherByLocation(latitude, longitude);
-});
-  var apiKey = "81fba63bc262d8384351efd1abd18569";
-  var cityName = "Minneapolis";
+    // Reinitialize Flickity carousel
+    $(".gallery").flickity("destroy");
+    $(".gallery").flickity({
+      cellAlign: "center",
+      wrapAround: true,
+      draggable: false,
+    });
+  }
+  // Get the user's current position
+  navigator.geolocation.getCurrentPosition(function (position) {
+    var latitude = position.coords.latitude;
+    var longitude = position.coords.longitude;
+
+    // Use the latitude and longitude to fetch weather
+    fetchWeatherByLocation(latitude, longitude);
+  });
+
 
   // Construct the API URL
 
   function weatherFetch() {
-    var apiLocationUrl =
-      "https://api.openweathermap.org/geo/1.0/direct?q=" +
-      cityName +
-      "&limit=1&appid=" +
-      apiKey;
+    var apiLocationUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${cityName}&limit=1&appid=${apiKey}`;
 
     // Make the API request
     fetch(apiLocationUrl)
       .then((response) => response.json())
       .then((data) => {
-        // console.log("API Location Response:", data);
         // Handle the API response
         if (data.length > 0) {
           var latitude = data[0].lat;
           var longitude = data[0].lon;
-          // console.log("Latitude:", latitude);
-          // console.log("Longitude:", longitude);
 
           fetch5DayForecast(latitude, longitude);
-          console.log("tempforecasts: ",tForecasts)
-          var apiWeatherUrl =
-            "https://api.openweathermap.org/data/2.5/weather?lat=" +
-            latitude +
-            "&lon=" +
-            longitude +
-            "&appid=" +
-            apiKey;
+          //console.log("tempforecasts: ", tForecasts);
+          var apiWeatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}`;
 
           // Make the API request
           fetch(apiWeatherUrl)
             .then((response) => response.json())
             .then((data) => {
-              // console.log("API Weather Response:", data);
+              console.log(data)
               // Handle the API response
               if (data) {
-                // console.log("description", data)
                 let condition = data.weather[0].main;
-                
+                let curHumidity = data.main.humidity
+                previousData = currentData;
+                currentData = condition;
+                determineWeather();
                 let imageFileName;
                 if (weathers[condition]) {
                   imageFileName = weathers[condition];
-                } else if (weathers['Atmosphere'][condition]) {
-                  imageFileName = weathers['Atmosphere'][condition];
+                } else if (weathers["Atmosphere"][condition]) {
+                  imageFileName = weathers["Atmosphere"][condition];
                 }
-  
+
                 if (imageFileName) {
                   const cityWeather = {
                     city: cityName,
+                    country: data.sys.country,
                     weatherCondition: condition,
                     weatherImage: imageFileName,
                   };
-  
+
                   // Check if city already exists in the stored cities array
-                  const cityExists = storedCities.some(storedCity => storedCity.city.toLowerCase() === cityName.toLowerCase());
-  
+                  const cityExists = storedCities.some(
+                    (storedCity) =>
+                      storedCity.city.toLowerCase() === cityName.toLowerCase()
+                  );
+
                   if (!cityExists) {
                     // Save to localStorage
                     storedCities.push(cityWeather);
-                    localStorage.setItem("cities", JSON.stringify(storedCities));
-  
+                    localStorage.setItem(
+                      "cities",
+                      JSON.stringify(storedCities)
+                    );
+
                     // Add to gallery
                     addCityToGallery(cityWeather);
                   }
-                  fDegree = Math.floor((data.main.temp - 273.15) * 9/5 + 32)
-                  console.log(fDegree)
-                  $('#info-display').html(`
+                  fDegree = Math.floor(
+                    ((data.main.temp - 273.15) * 9) / 5 + 32
+                  );
+                  console.log(fDegree);
+                  $("#info-display").html(
+                    `
                   <div class="info">City: ${cityName}</div>
                   <div class="info">Condition: ${condition}</div>
-                  <div class="info">Temperature: ` + fDegree + `°F</div>
-                `);
-                  
-  
+                  <div class="info">Temperature: ${fDegree}°F</div>
+                  <div class="info">Humidity: ${curHumidity}%</div>`
+                  );
                 } else {
-                  console.log('No image file name found for the condition:', condition);
+                  console.log(
+                    "No image file name found for the condition:",
+                    condition
+                  );
                 }
-  
               } else {
                 console.log("No results found for the specified location.");
               }
@@ -580,27 +544,17 @@ navigator.geolocation.getCurrentPosition(function(position) {
     var keycode = event.keyCode ? event.keyCode : event.which;
     if (keycode === 13) {
       var toSearch = $(this).val();
-      toSearch = capitalizeFirstLetter(toSearch)
+      toSearch = capitalizeFirstLetter(toSearch).split("").filter((char) => (/^[a-zA-Z ]*$/).test(char)).join("");
       cityName = toSearch;
       try {
-        weatherFetch();
-        // console.log("working!")
+        console.log("cityname: ", cityName);
+        weatherFetch()
       } catch (error) {
+        console.log(error);
         console.log("No city found!");
       }
     }
   });
-
-  // Get the reference to the search element using jQuery
-  const search = $("#search");
-  // Set the background image dynamically using the getAssetUrl() function
-  search.css("background-image", `url("${getAssetUrl("/assets/images/icons/search.png")}")`);
-  // Get the reference to the image element
-  // Get the reference to the image element using jQuery
-  const $image = $("#crystal-ball");
-
-  // Set the src attribute dynamically using the getAssetUrl() function
-  $image.attr("src", getAssetUrl("/assets/images/icons/CrystalBall.png"));
 
   // Load previously searched cities from localStorage
   var storedCities = JSON.parse(localStorage.getItem("cities")) || [];
@@ -608,36 +562,8 @@ navigator.geolocation.getCurrentPosition(function(position) {
     addCityToGallery(cityWeather);
   });
 
-  // Reinitialize Flickity carousel
-
-  // setTimeout(() => {
-  //   cityName = "Miami"
-  //   weatherFetch();
-  // }, 150);
-  // setTimeout(() => {
-  //   cityName = "Seattle"
-  //   weatherFetch();
-  // }, 250);
-  // setTimeout(() => {
-  //   cityName = "Los Angeles"
-  //   weatherFetch();
-  // }, 400);
-  // setTimeout(() => {
-  //   cityName = "Chicago"
-  //   weatherFetch();
-  // }, 450);
-  // setTimeout(() => {
-  //   cityName = "New York"
-  //   weatherFetch();
-  // }, 500);
-  // setTimeout(() => {
-  //   cityName = "Honolulu"
-  //   weatherFetch();
-  // }, 550);
   setTimeout(() => {
-    cityName = "Minneapolis"
+    cityName = "Minneapolis";
     weatherFetch();
   }, 200);
-  }
-)
-
+});

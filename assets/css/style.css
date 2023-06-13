@@ -6,10 +6,12 @@
     opacity: 1;
   }
 }
+
 * {
-  -webkit-box-sizing: border-box;
   box-sizing: border-box;
+  -webkit-box-sizing: border-box;
 }
+
 body {
     height: 100vh;
     width: 100vw;
@@ -23,15 +25,23 @@ body {
 
 #page {
   display: flex;
-  flex-direction: row;
+  flex-direction: row
 }
 
 #forecast {
   min-width: var(--forecast-minwidth);
   height: var(--forecast-height);
   background-color: var(--forecast-bkgcolor);
-  margin-right: var(--forecast-marginright)
+  margin-right: var(--forecast-marginright);
 }
+
+h2 {
+  font-size: 1em;
+  margin-bottom: .5vw;
+  padding: 0 1vw 0 1vw;
+  text-shadow: var(--base-textshadow)
+}
+
 .forecast-card {
   background-color: var(--forecast-card-bkgcolor);
   min-width: var(--forecast-card-minwidth);
@@ -182,8 +192,7 @@ h1{
 .gallery {
   width: var(--gallery-width);
   height: var(--gallery-height);
-  background-color: var(--gallery-bkgcolor);
-  border-radius: var(--gallery-border-radius);
+  background-color: var(--gallery-bkgcolor)
 }
 
 
@@ -191,9 +200,12 @@ h1{
   width: var(--gallerycell-width);
   height: var(--gallerycell-height);
   background: var(--gallerycell-bkgcolor);
+  
   counter-increment: gallery-cell;
   text-shadow: var(--info-textshadow);
   padding: var(--gallerycell-padding);
+  -webkit-box-sizing: content-box !important;
+  box-sizing: content-box !important;
 }
 /* 
 cell number */ */
@@ -204,4 +216,8 @@ cell number */ */
   line-height: var(--gallerycell-lineheight);
   font-size: var(--gallerycell-textsize);
   color: var(--gallerycell-textcolor);
+}
+.flickity-viewport > * {
+  -webkit-box-sizing: content-box !important;
+  box-sizing: content-box !important;
 }
