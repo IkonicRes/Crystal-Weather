@@ -27,7 +27,15 @@ $(window).on(
     const cloudyClear = getAssetUrl("/assets/images/backgrounds/cloudy-clear.png");
     const snowy = getAssetUrl("/assets/images/backgrounds/snowy.png");
     const thunderStorm = getAssetUrl("/assets/images/backgrounds/thunder-storm.png");
-  
+    const misty = getAssetUrl("/assets/images/backgrounds/blank.png");
+    const smoky = getAssetUrl("/assets/images/backgrounds/sunny-clear.png");
+    const hazy = getAssetUrl("/assets/images/backgrounds/sunny-drizzle.png");
+    const dusty = getAssetUrl("/assets/images/backgrounds/sunny-rain.png");
+    const foggy = getAssetUrl("/assets/images/backgrounds/cloudy-clear.png");
+    const sandy = getAssetUrl("/assets/images/backgrounds/snowy.png");
+    const ashy = getAssetUrl("/assets/images/backgrounds/thunder-storm.png");
+    const gtfo = getAssetUrl("/assets/images/backgrounds/snowy.png");
+    const getChains = getAssetUrl("/assets/images/backgrounds/thunder-storm.png");
 
     const weathers = {
       Blank: blankWeather,
@@ -38,15 +46,15 @@ $(window).on(
       Drizzle: rainDrizzle,
       Thunderstorm: thunderStorm,
       Atmosphere: {
-        Mist: sunnyClear,
-        Smoke: sunnyClear,
-        Haze: sunnyClear,
-        Dust: sunnyClear,
-        Fog: sunnyClear,
-        Sand: sunnyClear,
-        Ash: sunnyClear,
-        Squall: sunnyRain,
-        Tornado: cloudyClear,
+        Mist: misty,
+        Smoke: smoky,
+        Haze: hazy,
+        Dust: dusty,
+        Fog: foggy,
+        Sand: sandy,
+        Ash: ashy,
+        Squall: gtfo,
+        Tornado: getChains,
       },
     };
     // console.log(weathers)
