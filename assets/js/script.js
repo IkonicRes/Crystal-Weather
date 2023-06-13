@@ -1,5 +1,5 @@
 $(window).on("load", function () {
-  const baseDir = window.location.host + window.location.pathname;
+  const baseDir = window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/"));
   
 
   function getAssetUrl(assetPath) {
@@ -176,15 +176,18 @@ $(window).on("load", function () {
   }
 
   function determineWeather() {
-    oldWeather = weathers[previousData];
-    newWeather = weathers[currentData]
+    oldWeather = currentData
+    newWeather = currentData
+    console.log(oldWeather, newWeather)
     changeWeather(oldWeather, newWeather);
   }
   // Create a function to change the weather background
   function changeWeather(startWeather, targetWeather) {
     // console.log("[Change Weather] Started.");
-    startWeather = baseDir + startWeather;
-    targetWeather = baseDir + targetWeather;
+    console.log(startWeather, targetWeather)
+    startWeather = weathers[startWeather];
+    targetWeather = weathers[targetWeather];
+    console.log(startWeather, targetWeather)
     // Create a temporary background element with the startWeather image
     const tempBackground = $("<div>")
       .css({
