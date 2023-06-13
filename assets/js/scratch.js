@@ -1,15 +1,11 @@
 $(window).on("load", function() {
-    const baseDir = window.location.pathname.substring(
-      0,
-      window.location.pathname.lastIndexOf("/")
-    );
+    console.log(window.location);
+    const baseDir = window.location.pathname
   
     function getAssetUrl(assetPath) {
       console.log(baseDir);
       console.log(baseDir + assetPath);
-      if (baseDir == undefined){
-        return assetPath
-      }
+      if (baseDir == undefined) { return assetPath; }
       return baseDir + assetPath;
     }
   
