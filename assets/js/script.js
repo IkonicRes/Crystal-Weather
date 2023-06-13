@@ -1,9 +1,6 @@
  const baseDir = window.location.origin + window.location.pathname
  function getAssetUrl(assetPath) {
   path = baseDir + assetPath
-  console.log("🚀 ~ file: script.js:9 ~ getAssetUrl ~ assetPath:", assetPath)
-  console.log("🚀 ~ file: script.js:10 ~ getAssetUrl ~ path:", path)
-  console.log("🚀 ~ file: script.js:11 ~ getAssetUrl ~ baseDir:", baseDir)
   return path
 }
 
@@ -57,7 +54,7 @@ $(window).on(
         Tornado: getChains,
       },
     };
-    // console.log(weathers)
+
     var tForecasts = [];
     var latitude;
     var longitude;
@@ -104,7 +101,6 @@ $(window).on(
     }
   
     function fetch5DayForecast(latitude, longitude) {
-      // console.log("testing fetch5DayForecast");
 
       var apiForecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${apiKey}`;
       let aggregatedData = {};
@@ -190,16 +186,12 @@ $(window).on(
     function determineWeather() {
       oldWeather = currentData
       newWeather = currentData
-      console.log(oldWeather, newWeather)
       changeWeather(oldWeather, newWeather);
     }
   // Create a function to change the weather background
   function changeWeather(startWeather, targetWeather) {
-    // console.log("[Change Weather] Started.");
-    console.log(startWeather, targetWeather)
     startWeather = weathers[startWeather];
     targetWeather = weathers[targetWeather];
-    console.log(startWeather, targetWeather)
     // Create a temporary background element with the startWeather image
     const tempBackground = $("<div>")
       .css({
@@ -244,16 +236,13 @@ $(window).on(
         // Load the cloud images and store them in the images array
         imageSources.forEach((source, index) => {
           const img = new Image();
-          console.log(source)
           img.src = source;
-          // console.log(img.src);
           img.onload = function () {
             images[index] = img;
             // Increment the load count and check if all images have been loaded
             loadCount++;
             // If all images have been loaded, start the cloud animation and resolve the promise
             if (loadCount === imageSources.length) {
-              // console.log(images); // Debugging line
               startAnimation();
               resolve();
             }
@@ -267,8 +256,6 @@ $(window).on(
     Promise.all([fadePromise])
       .then(() => {
         // Log a message when the background fade and image loading are complete
-        // console.log("Background fade and image loading complete");
-        // console.log(cityName);
       })
       .catch((error) => {
         // Log an error if there was an error during the promise chain
@@ -358,8 +345,6 @@ $(window).on(
           stopAnimation();
           $(canvas).fadeOut(1000, function () {
             $(this).remove();
-            // Log a message indicating that the animation has stopped
-            // console.log("Animation stopped");
           });
         } else {
           ctx.clearRect(0, 0, canvas[0].width, canvas[0].height);
@@ -392,7 +377,6 @@ $(window).on(
   }
 
   function addCityToGallery(cityWeather) {
-    // console.log(cityWeather)
     // Check if the city already exists in the gallery
     var existingCity = $(".gallery-cell").filter(function () { return $(this).text().trim().split("").filter(char => /^[a-zA-Z]+(-[a-zA-Z]+)*$/.test(char)) === cityWeather.city; });
 
@@ -476,7 +460,6 @@ $(window).on(
           var longitude = data[0].lon;
 
           fetch5DayForecast(latitude, longitude);
-          //console.log("tempforecasts: ", tForecasts);
           var apiWeatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}`;
 
           // Make the API request
@@ -488,6 +471,7 @@ $(window).on(
               if (data) {
                 let condition = data.weather[0].main;
                 let curHumidity = data.main.humidity
+                let curWind = data.wind.speed
                 previousData = currentData;
                 currentData = condition;
                 determineWeather();
@@ -526,34 +510,21 @@ $(window).on(
                   fDegree = Math.floor(
                     ((data.main.temp - 273.15) * 9) / 5 + 32
                   );
-                  // console.log(fDegree);
                   $("#info-display").html(
                     `
                   <div class="info">City: ${cityName}</div>
                   <div class="info">Condition: ${condition}</div>
                   <div class="info">Temperature: ${fDegree}°F</div>
-                  <div class="info">Humidity: ${curHumidity}%</div>`
+                  <div class="info">Humidity: ${curHumidity}%</div>
+                  <div class="info">Wind Speed: ${curWind} m/s</div>`
                   );
-                } else {
-                  console.log(
-                    "No image file name found for the condition:",
-                    condition
-                  );
-                }
-              } else {
-                console.log("No results found for the specified location.");
-              }
+                } else { console.error(`No image file name found for the condition: ${condition}`); }
+              } else { console.log("No results found for the specified location."); }
             })
-            .catch((error) => {
-              console.log("API request failed. Error:", error);
-            });
-        } else {
-          console.log("No results found for the specified city.");
-        }
+            .catch((error) => { console.error(`API request failed. Error:${error}`); });
+        } else { console.warn("No results found for the specified city."); }
       })
-      .catch((error) => {
-        console.log("API request failed. Error:", error);
-      });
+      .catch((error) => { console.error("API request failed. Error:", error); });
   }
 
   $("#search-bar").keypress(function (event) {
@@ -563,11 +534,10 @@ $(window).on(
       toSearch = capitalizeFirstLetter(toSearch).split("").filter((char) => (/^[a-zA-Z ]*$/).test(char)).join("");
       cityName = toSearch;
       try {
-        // console.log("cityname: ", cityName);
         weatherFetch()
       } catch (error) {
-        console.log(error);
-        console.log("No city found!");
+        console.error(error);
+        console.error("No city found!");
       }
     }
   });
