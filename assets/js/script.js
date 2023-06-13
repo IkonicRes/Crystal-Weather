@@ -466,12 +466,11 @@ $(window).on(
           fetch(apiWeatherUrl)
             .then((response) => response.json())
             .then((data) => {
-              // console.log(data)
+              console.log(data)
               // Handle the API response
               if (data) {
                 let condition = data.weather[0].main;
-                let curHumidity = data.main.humidity
-                let curWind = data.wind.speed
+                let iconUrl = `http://openweathermap.org/img/w/${data.weather[0].icon}.png`;
                 previousData = currentData;
                 currentData = condition;
                 determineWeather();
@@ -507,16 +506,16 @@ $(window).on(
                     // Add to gallery
                     addCityToGallery(cityWeather);
                   }
-                  fDegree = Math.floor(
-                    ((data.main.temp - 273.15) * 9) / 5 + 32
-                  );
+                  fDegree = Math.floor(((data.main.temp - 273.15) * 9) / 5 + 32);
                   $("#info-display").html(
                     `
+                    <img src="${iconUrl}" alt="${data.weather[0].main}" class="weather-icon-main"></div>
+                    <div class="info">${dayjs(data.date).format("MMM D")}</div>
                   <div class="info">City: ${cityName}</div>
                   <div class="info">Condition: ${condition}</div>
                   <div class="info">Temperature: ${fDegree}°F</div>
-                  <div class="info">Humidity: ${curHumidity}%</div>
-                  <div class="info">Wind Speed: ${curWind} m/s</div>`
+                  <div class="info">Humidity: ${data.main.humidity}%</div>
+                  <div class="info">Wind Speed: ${data.wind.speed}m/s</div>`
                   );
                 } else { console.error(`No image file name found for the condition: ${condition}`); }
               } else { console.log("No results found for the specified location."); }

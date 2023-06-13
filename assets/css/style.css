@@ -97,6 +97,9 @@ h1{
   text-shadow: var(--info-textshadow);
 }
 
+.weather-icon-main {
+  padding-right: 2vw;
+}
 #selection {
   display:flex;
   flex-direction: column;
