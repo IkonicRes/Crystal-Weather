@@ -1,7 +1,15 @@
 $(window).on("load", function () {
   const baseDir = window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/"));
   
-  function getAssetUrl(assetPath) { return baseDir + assetPath; }
+
+  function getAssetUrl(assetPath) {
+    path = baseDir + assetPath
+    console.log("🚀 ~ file: script.js:9 ~ getAssetUrl ~ assetPath:", assetPath)
+    console.log("🚀 ~ file: script.js:10 ~ getAssetUrl ~ path:", path)
+    console.log("🚀 ~ file: script.js:11 ~ getAssetUrl ~ baseDir:", baseDir)
+    return path}
+
+    
   
   // INITALIZE GALLERY
   $(".gallery").flickity({
@@ -39,6 +47,7 @@ $(window).on("load", function () {
       Tornado: cloudyClear,
     },
   };
+  // console.log(weathers)
   var tForecasts = [];
   var latitude;
   var longitude;
@@ -83,7 +92,7 @@ $(window).on("load", function () {
   }
   
   function fetch5DayForecast(latitude, longitude) {
-    console.log("testing fetch5DayForecast");
+    // console.log("testing fetch5DayForecast");
 
     var apiForecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${apiKey}`;
     let aggregatedData = {};
@@ -168,14 +177,12 @@ $(window).on("load", function () {
 
   function determineWeather() {
     oldWeather = weathers[previousData];
-    newWeather = weathers[currentData];
-    console.log(previousData);
-    console.log(currentData);
+    newWeather = weathers[currentData]
     changeWeather(oldWeather, newWeather);
   }
   // Create a function to change the weather background
   function changeWeather(startWeather, targetWeather) {
-    console.log("[Change Weather] Started.");
+    // console.log("[Change Weather] Started.");
     startWeather = baseDir + startWeather;
     targetWeather = baseDir + targetWeather;
     // Create a temporary background element with the startWeather image
@@ -376,7 +383,7 @@ $(window).on("load", function () {
   }
 
   function addCityToGallery(cityWeather) {
-    console.log(cityWeather)
+    // console.log(cityWeather)
     // Check if the city already exists in the gallery
     var existingCity = $(".gallery-cell").filter(function () { return $(this).text().trim().split("").filter(char => /^[a-zA-Z]+(-[a-zA-Z]+)*$/.test(char)) === cityWeather.city; });
 
@@ -467,7 +474,7 @@ $(window).on("load", function () {
           fetch(apiWeatherUrl)
             .then((response) => response.json())
             .then((data) => {
-              console.log(data)
+              // console.log(data)
               // Handle the API response
               if (data) {
                 let condition = data.weather[0].main;
@@ -510,7 +517,7 @@ $(window).on("load", function () {
                   fDegree = Math.floor(
                     ((data.main.temp - 273.15) * 9) / 5 + 32
                   );
-                  console.log(fDegree);
+                  // console.log(fDegree);
                   $("#info-display").html(
                     `
                   <div class="info">City: ${cityName}</div>
@@ -547,7 +554,7 @@ $(window).on("load", function () {
       toSearch = capitalizeFirstLetter(toSearch).split("").filter((char) => (/^[a-zA-Z ]*$/).test(char)).join("");
       cityName = toSearch;
       try {
-        console.log("cityname: ", cityName);
+        // console.log("cityname: ", cityName);
         weatherFetch()
       } catch (error) {
         console.log(error);
