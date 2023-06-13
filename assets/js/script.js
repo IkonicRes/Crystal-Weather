@@ -8,7 +8,6 @@ $(window).on("load", function () {
     console.log("🚀 ~ file: script.js:10 ~ getAssetUrl ~ path:", path)
     console.log("🚀 ~ file: script.js:11 ~ getAssetUrl ~ baseDir:", baseDir)
     return path}
-    console.log("🚀 ~ file: script.js:11 ~ getAssetUrl ~ baseDir:", baseDir)
     
   
   // INITALIZE GALLERY
@@ -204,11 +203,11 @@ $(window).on("load", function () {
       .hide();
     // Define the image sources for the cloud animation
     const imageSources = [
-      getAssetUrl("/assets/images/animation/cloud1.png"),
-      getAssetUrl("/assets/images/animation/cloud2.png"),
-      getAssetUrl("/assets/images/animation/cloud3.png"),
-      getAssetUrl("/assets/images/animation/cloud4.png"),
-      getAssetUrl("/assets/images/animation/cloud5.png"),
+      ("/assets/images/animation/cloud1.png"),
+      ("/assets/images/animation/cloud2.png"),
+      ("/assets/images/animation/cloud3.png"),
+      ("/assets/images/animation/cloud4.png"),
+      ("/assets/images/animation/cloud5.png"),
     ];
     // Create an array to store the loaded cloud images
     const images = [];
