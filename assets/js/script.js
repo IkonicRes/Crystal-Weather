@@ -1,5 +1,5 @@
 $(window).on("load", function () {
-  const baseDir = window.location.pathname.substring(0, 43);
+  const baseDir = window.location.pathname;
   
 
   function getAssetUrl(assetPath) {
@@ -8,7 +8,7 @@ $(window).on("load", function () {
     console.log("🚀 ~ file: script.js:10 ~ getAssetUrl ~ path:", path)
     console.log("🚀 ~ file: script.js:11 ~ getAssetUrl ~ baseDir:", baseDir)
     return path}
-
+    console.log("🚀 ~ file: script.js:11 ~ getAssetUrl ~ baseDir:", baseDir)
     
   
   // INITALIZE GALLERY
