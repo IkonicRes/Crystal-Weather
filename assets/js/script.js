@@ -1,5 +1,5 @@
 $(window).on("load", function () {
-  const baseDir = window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/"));
+  const baseDir = window.location.host + window.location.pathname;
   
 
   function getAssetUrl(assetPath) {
@@ -8,6 +8,7 @@ $(window).on("load", function () {
     console.log("🚀 ~ file: script.js:10 ~ getAssetUrl ~ path:", path)
     console.log("🚀 ~ file: script.js:11 ~ getAssetUrl ~ baseDir:", baseDir)
     return path}
+    console.log("🚀 ~ file: script.js:11 ~ getAssetUrl ~ baseDir:", baseDir)
     
   
   // INITALIZE GALLERY
@@ -17,13 +18,13 @@ $(window).on("load", function () {
     wrapAround: true,
   });
 
-  const blankWeather = ("/assets/images/backgrounds/blank.png");
-  const sunnyClear = ("/assets/images/backgrounds/sunny-clear.png");
-  const rainDrizzle = ("/assets/images/backgrounds/sunny-drizzle.png");
-  const sunnyRain = ("/assets/images/backgrounds/sunny-rain.png");
-  const cloudyClear = ("/assets/images/backgrounds/cloudy-clear.png");
-  const snowy = ("/assets/images/backgrounds/snowy.png");
-  const thunderStorm = ("/assets/images/backgrounds/thunder-storm.png");
+  const blankWeather = getAssetUrl("/assets/images/backgrounds/blank.png");
+  const sunnyClear = getAssetUrl("/assets/images/backgrounds/sunny-clear.png");
+  const rainDrizzle = getAssetUrl("/assets/images/backgrounds/sunny-drizzle.png");
+  const sunnyRain = getAssetUrl("/assets/images/backgrounds/sunny-rain.png");
+  const cloudyClear = getAssetUrl("/assets/images/backgrounds/cloudy-clear.png");
+  const snowy = getAssetUrl("/assets/images/backgrounds/snowy.png");
+  const thunderStorm = getAssetUrl("/assets/images/backgrounds/thunder-storm.png");
   
 
   const weathers = {
@@ -203,11 +204,11 @@ $(window).on("load", function () {
       .hide();
     // Define the image sources for the cloud animation
     const imageSources = [
-      ("/assets/images/animation/cloud1.png"),
-      ("/assets/images/animation/cloud2.png"),
-      ("/assets/images/animation/cloud3.png"),
-      ("/assets/images/animation/cloud4.png"),
-      ("/assets/images/animation/cloud5.png"),
+      getAssetUrl("/assets/images/animation/cloud1.png"),
+      getAssetUrl("/assets/images/animation/cloud2.png"),
+      getAssetUrl("/assets/images/animation/cloud3.png"),
+      getAssetUrl("/assets/images/animation/cloud4.png"),
+      getAssetUrl("/assets/images/animation/cloud5.png"),
     ];
     // Create an array to store the loaded cloud images
     const images = [];
