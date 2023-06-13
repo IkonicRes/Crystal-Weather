@@ -1,5 +1,5 @@
 $(window).on("load", function () {
-  const baseDir = window.location.pathname.substring(0, window.location.pathname.firstIndexOf("Crystal-Weather"));
+  const baseDir = window.location.pathname.substring(0, 43);
   
 
   function getAssetUrl(assetPath) {
