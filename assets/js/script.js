@@ -40,7 +40,7 @@ $(window).on("load", function () {
       Clouds: getAssetUrl("assets/images/backgrounds/cloudy-clear.png"),
       Rain: getAssetUrl("assets/images/backgrounds/sunny-rain.png"),
       Snow: getAssetUrl("assets/images/backgrounds/snowy.png"),
-      Drizzle: getAssetUrl("assets/images/backgrounds/sunny-drizzle.png"),
+      Drizzle: getAssetUrl("assets/images/backgrounds/sunny-showers.png"),
       Thunderstorm: getAssetUrl("assets/images/backgrounds/thunder-storm.png"),
       Atmosphere: {
         Mist: getAssetUrl("assets/images/backgrounds/blank.png"),
