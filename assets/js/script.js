@@ -1,63 +1,61 @@
- //Our snippet function to get the correct path to assets on deployment, initialize the base directory as
- //the pretext to our relative path
- const baseDir = window.location.origin + window.location.pathname
-//Then call this function any time you need to get the path and pass in relative path as the argument
- function getAssetUrl(assetPath) {
-  path = baseDir + assetPath
-  return path
+//Our snippet function to get the correct path to assets on deployment, initialize the base directory as
+//the pretext to our relative path
+const baseDir = window.location.origin + window.location.pathname
+
+// Helper Functions
+// Call this function any time you need to get the path and pass in relative path as the argument
+function getAssetUrl(assetPath) { return baseDir + assetPath }
+
+// Helper function for capitalizing the first letter of a string
+function capitalizeFirstLetter(string) { return string.charAt(0).toUpperCase() + string.slice(1); }
+
+// Helper function to find the most common element in an array
+function mode(array) {
+  return array
+    .sort(
+      (a, b) =>
+        array.filter((v) => v === a).length -
+        array.filter((v) => v === b).length
+    )
+    .pop();
 }
+
 //Wait until the window loads to fire the rest of the code
 $(window).on("load", function () {
-
+    // Get the canvas used for the weather changing animation
     const canvas = $("#canvas")[0];
     ctx = canvas.getContext("2d");
 
-  
-    // INITALIZE GALLERY
+    // Initialize the flickity js gallery
     $(".gallery").flickity({
       cellAlign: "center",
       contain: true,
       wrapAround: true,
     });
 
-    const blankWeather = getAssetUrl("/assets/images/backgrounds/blank.png");
-    const sunnyClear = getAssetUrl("/assets/images/backgrounds/sunny-clear.png");
-    const rainDrizzle = getAssetUrl("/assets/images/backgrounds/sunny-drizzle.png");
-    const sunnyRain = getAssetUrl("/assets/images/backgrounds/sunny-rain.png");
-    const cloudyClear = getAssetUrl("/assets/images/backgrounds/cloudy-clear.png");
-    const snowy = getAssetUrl("/assets/images/backgrounds/snowy.png");
-    const thunderStorm = getAssetUrl("/assets/images/backgrounds/thunder-storm.png");
-    const misty = getAssetUrl("/assets/images/backgrounds/blank.png");
-    const smoky = getAssetUrl("/assets/images/backgrounds/sunny-clear.png");
-    const hazy = getAssetUrl("/assets/images/backgrounds/sunny-drizzle.png");
-    const dusty = getAssetUrl("/assets/images/backgrounds/sunny-rain.png");
-    const foggy = getAssetUrl("/assets/images/backgrounds/cloudy-clear.png");
-    const sandy = getAssetUrl("/assets/images/backgrounds/snowy.png");
-    const ashy = getAssetUrl("/assets/images/backgrounds/thunder-storm.png");
-    const gtfo = getAssetUrl("/assets/images/backgrounds/snowy.png");
-    const getChains = getAssetUrl("/assets/images/backgrounds/thunder-storm.png");
-
+    // Create an object containing the different weather types
     const weathers = {
-      Blank: blankWeather,
-      Clear: sunnyClear,
-      Clouds: cloudyClear,
-      Rain: sunnyRain,
-      Snow: snowy,
-      Drizzle: rainDrizzle,
-      Thunderstorm: thunderStorm,
+      Blank: getAssetUrl("/assets/images/backgrounds/blank.png"),
+      Clear: getAssetUrl("/assets/images/backgrounds/sunny-clear.png"),
+      Clouds: getAssetUrl("/assets/images/backgrounds/cloudy-clear.png"),
+      Rain: getAssetUrl("/assets/images/backgrounds/sunny-rain.png"),
+      Snow: getAssetUrl("/assets/images/backgrounds/snowy.png"),
+      Drizzle: getAssetUrl("/assets/images/backgrounds/sunny-drizzle.png"),
+      Thunderstorm: getAssetUrl("/assets/images/backgrounds/thunder-storm.png"),
       Atmosphere: {
-        Mist: misty,
-        Smoke: smoky,
-        Haze: hazy,
-        Dust: dusty,
-        Fog: foggy,
-        Sand: sandy,
-        Ash: ashy,
-        Squall: gtfo,
-        Tornado: getChains,
+        Mist: getAssetUrl("/assets/images/backgrounds/blank.png"),
+        Smoke: getAssetUrl("/assets/images/backgrounds/sunny-clear.png"),
+        Haze: getAssetUrl("/assets/images/backgrounds/sunny-drizzle.png"),
+        Dust: getAssetUrl("/assets/images/backgrounds/sunny-rain.png"),
+        Fog: getAssetUrl("/assets/images/backgrounds/cloudy-clear.png"),
+        Sand: getAssetUrl("/assets/images/backgrounds/snowy.png"),
+        Ash: getAssetUrl("/assets/images/backgrounds/thunder-storm.png"),
+        Squall: getAssetUrl("/assets/images/backgrounds/snowy.png"),
+        Tornado: getAssetUrl("/assets/images/backgrounds/thunder-storm.png"),
       },
     };
 
+    // Initializing variables for later use.
     var tForecasts = [];
     var latitude;
     var longitude;
@@ -69,21 +67,17 @@ $(window).on("load", function () {
     var previousData = "Clear";
     var currentData = "Clear";
 
-    function capitalizeFirstLetter(string) {
-      return string.charAt(0).toUpperCase() + string.slice(1);
-    }
-
+    // Generate the HTML to display the 5 day forecast
     function display5DayForecast(forecasts) {
       let forecastHeader = "<h2 id='forecast-header'>5 Day " + cityName + " Forecast</h2>";
       $("#forecast").html(forecastHeader)
-      // Start with an empty string
+      // Initialize an empty string that will store the HTML of the forecast cards.
       let html = "";
       
       // Loop through the forecasts array
       forecasts.forEach((forecast) => {
         // Format the date
         let formattedDate = dayjs(forecast.date).format("MMM D");
-    
         // Generate the URL for the weather icon
         let iconUrl = `http://openweathermap.org/img/w/${forecast.icon}.png`;
         // Add a 'forecast-card' div to the html string
@@ -98,24 +92,26 @@ $(window).on("load", function () {
           </div>
         `;
       });
-    
-      // Add the html to the #forecast element
+      // Add the string of HTML to the #forecast element
       $("#forecast").append(html);
     }
-  
+    
+    // Fetch the data for the 5 day forecast
     function fetch5DayForecast(latitude, longitude) {
-
+      // Initialize variables and the fetch url
       var apiForecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${apiKey}`;
       let aggregatedData = {};
       let tForecasts = [];
 
+      // Run the fetch request to the URL
       fetch(apiForecastUrl)
         .then((response) => response.json())
         .then((data) => {
           if (data) {
             data.list.forEach((forecast) => {
               let date = forecast.dt_txt.split(" ")[0];
-
+              // If the date is not found, add a new entry to the array with the data object.
+              // If the date is found, add the data object entries to their corrosponding array.
               if (!aggregatedData[date]) {
                 aggregatedData[date] = {
                   temps: [forecast.main.temp],
@@ -133,6 +129,7 @@ $(window).on("load", function () {
               }
             });
 
+            // Find the average of the data.
             for (let date in aggregatedData) {
               let temps = aggregatedData[date].temps;
               let icons = aggregatedData[date].icons;
@@ -150,7 +147,8 @@ $(window).on("load", function () {
 
               // Add the condition to the filename for the background image
               let weatherImage = weathers[mostCommonCondition];
-
+              
+              // Add the data to the forecast array
               tForecasts.push({
                 date: date,
                 avgTemp: avgTempF,
@@ -161,36 +159,14 @@ $(window).on("load", function () {
                 windSpeed: avgWindSpeed,
               });
             }
-
+            // Cut the forecast array to ensure only 5 entries.
             tForecasts = tForecasts.slice(0, 5);
-
             display5DayForecast(tForecasts);
-          } else {
-            console.log("No results found for the specified location.");
-          }
+          } else { console.log("No results found for the specified location."); }
         })
-        .catch((error) => {
-          console.log("API request failed. Error:", error);
-        });
+        .catch((error) => { console.log("API request failed. Error:", error); });
     } 
 
-
-    // Helper function to find the most common element in an array
-    function mode(array) {
-      return array
-        .sort(
-          (a, b) =>
-            array.filter((v) => v === a).length -
-            array.filter((v) => v === b).length
-        )
-        .pop();
-    }
-
-    function determineWeather() {
-      oldWeather = currentData
-      newWeather = currentData
-      changeWeather(oldWeather, newWeather);
-    }
   // Create a function to change the weather background
   function changeWeather(startWeather, targetWeather) {
     startWeather = weathers[startWeather];
@@ -235,7 +211,6 @@ $(window).on("load", function () {
           "z-index": -1,
           "background-repeat": "no-repeat",
         });
-
         // Load the cloud images and store them in the images array
         imageSources.forEach((source, index) => {
           const img = new Image();
@@ -476,7 +451,7 @@ $(window).on("load", function () {
                 let iconUrl = `http://openweathermap.org/img/w/${data.weather[0].icon}.png`;
                 previousData = currentData;
                 currentData = condition;
-                determineWeather();
+                changeWeather(previousData, currentData);
                 let imageFileName;
                 if (weathers[condition]) {
                   imageFileName = weathers[condition];
@@ -528,7 +503,7 @@ $(window).on("load", function () {
       })
       .catch((error) => { console.error("API request failed. Error:", error); });
   }
-
+// When the user presses "enter" on the search bar, get the value on the search bar, capitalize the first letter, and set the "cityName variable" to it
   $("#search-bar").keypress(function (event) {
     var keycode = event.keyCode ? event.keyCode : event.which;
     if (keycode === 13) {
