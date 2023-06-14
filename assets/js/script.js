@@ -419,7 +419,7 @@ $(window).on("load", function () {
     var longitude = position.coords.longitude;
 
     // Use the latitude and longitude to fetch weather
-    fetchWeatherByLocation(latitude, longitude);
+    weatherFetch(currentCity)
   });
 
 
