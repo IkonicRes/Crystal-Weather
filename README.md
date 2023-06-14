@@ -5,21 +5,24 @@ Crystal Weather is a fun little app I made to browse the weather forecasts in wh
 see what the weather is in a particular area, and it will automatically be added to your saved gallery on the bottom of the page, which you can navigate by clicking through the carousel. Crystal weather features animations, background transitions, and a nice theme, as well as a 5 day forecast for the currently selected city. It has a lot of vivid background images for a variety of different weather conditions, including:
 
 <center>
-Cloudy
-Clear
-Rain
-Snow
-Drizzle
-Thunderstorm
-Mist
-Smoke
-Haze
-Dust
-Fog
-Sand
-Ash
-Squall, 
-and Tornado
+
+Cloudy  
+Clear  
+Rain  
+Snow  
+Drizzle  
+Thunderstorm  
+Mist  
+Smoke  
+Haze  
+Dust  
+Fog  
+Sand  
+Ash  
+Squall,  
+and Tornado  
+
+
 ## Table of Contents
 
 - [Usage](#usage)
