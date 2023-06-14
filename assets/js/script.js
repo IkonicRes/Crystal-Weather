@@ -35,23 +35,23 @@ $(window).on("load", function () {
 
     // Create an object containing the different weather types
     const weathers = {
-      Blank: getAssetUrl("/assets/images/backgrounds/blank.png"),
-      Clear: getAssetUrl("/assets/images/backgrounds/sunny-clear.png"),
-      Clouds: getAssetUrl("/assets/images/backgrounds/cloudy-clear.png"),
-      Rain: getAssetUrl("/assets/images/backgrounds/sunny-rain.png"),
-      Snow: getAssetUrl("/assets/images/backgrounds/snowy.png"),
-      Drizzle: getAssetUrl("/assets/images/backgrounds/sunny-drizzle.png"),
-      Thunderstorm: getAssetUrl("/assets/images/backgrounds/thunder-storm.png"),
+      Blank: getAssetUrl("assets/images/backgrounds/blank.png"),
+      Clear: getAssetUrl("assets/images/backgrounds/sunny-clear.png"),
+      Clouds: getAssetUrl("assets/images/backgrounds/cloudy-clear.png"),
+      Rain: getAssetUrl("assets/images/backgrounds/sunny-rain.png"),
+      Snow: getAssetUrl("assets/images/backgrounds/snowy.png"),
+      Drizzle: getAssetUrl("assets/images/backgrounds/sunny-drizzle.png"),
+      Thunderstorm: getAssetUrl("assets/images/backgrounds/thunder-storm.png"),
       Atmosphere: {
-        Mist: getAssetUrl("/assets/images/backgrounds/blank.png"),
-        Smoke: getAssetUrl("/assets/images/backgrounds/sunny-clear.png"),
-        Haze: getAssetUrl("/assets/images/backgrounds/sunny-drizzle.png"),
-        Dust: getAssetUrl("/assets/images/backgrounds/sunny-rain.png"),
-        Fog: getAssetUrl("/assets/images/backgrounds/cloudy-clear.png"),
-        Sand: getAssetUrl("/assets/images/backgrounds/snowy.png"),
-        Ash: getAssetUrl("/assets/images/backgrounds/thunder-storm.png"),
-        Squall: getAssetUrl("/assets/images/backgrounds/snowy.png"),
-        Tornado: getAssetUrl("/assets/images/backgrounds/thunder-storm.png"),
+        Mist: getAssetUrl("assets/images/backgrounds/blank.png"),
+        Smoke: getAssetUrl("assets/images/backgrounds/sunny-clear.png"),
+        Haze: getAssetUrl("assets/images/backgrounds/sunny-drizzle.png"),
+        Dust: getAssetUrl("assets/images/backgrounds/sunny-rain.png"),
+        Fog: getAssetUrl("assets/images/backgrounds/cloudy-clear.png"),
+        Sand: getAssetUrl("assets/images/backgrounds/snowy.png"),
+        Ash: getAssetUrl("assets/images/backgrounds/thunder-storm.png"),
+        Squall: getAssetUrl("assets/images/backgrounds/snowy.png"),
+        Tornado: getAssetUrl("assets/images/backgrounds/thunder-storm.png"),
       },
     };
 
@@ -190,11 +190,11 @@ $(window).on("load", function () {
       .hide();
     // Define the image sources for the cloud animation
     const imageSources = [
-      getAssetUrl("/assets/images/animation/cloud1.png"),
-      getAssetUrl("/assets/images/animation/cloud2.png"),
-      getAssetUrl("/assets/images/animation/cloud3.png"),
-      getAssetUrl("/assets/images/animation/cloud4.png"),
-      getAssetUrl("/assets/images/animation/cloud5.png"),
+      getAssetUrl("assets/images/animation/cloud1.png"),
+      getAssetUrl("assets/images/animation/cloud2.png"),
+      getAssetUrl("assets/images/animation/cloud3.png"),
+      getAssetUrl("assets/images/animation/cloud4.png"),
+      getAssetUrl("assets/images/animation/cloud5.png"),
     ];
     // Create an array to store the loaded cloud images
     const images = [];
@@ -414,14 +414,14 @@ $(window).on("load", function () {
     });
   }
 
-  navigator.geolocation.getCurrentPosition(function (position) {
-    var latitude = position.coords.latitude;
-    var longitude = position.coords.longitude;
+  // navigator.geolocation.getCurrentPosition(function (position) {
+  //   var latitude = position.coords.latitude;
+  //   var longitude = position.coords.longitude;
 
-    // Use the latitude and longitude to fetch weather
-    weatherFetch(currentCity)
-  });
-
+  //   // Use the latitude and longitude to fetch weather
+  //   weatherFetch(currentCity)
+  // });
+//
 
   // Construct the API URL
 
