@@ -1,11 +1,14 @@
+ //Our snippet function to get the correct path to assets on deployment, initialize the base directory as
+ //the pretext to our relative path
  const baseDir = window.location.origin + window.location.pathname
+//Then call this function any time you need to get the path and pass in relative path as the argument
  function getAssetUrl(assetPath) {
   path = baseDir + assetPath
   return path
 }
+//Wait until the window loads to fire the rest of the code
+$(window).on("load", function () {
 
-$(window).on(
-  "load", function () {
     const canvas = $("#canvas")[0];
     ctx = canvas.getContext("2d");
 
