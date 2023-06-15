@@ -19,6 +19,14 @@ function mode(array) {
     )
     .pop();
 }
+function getWeatherType(weatherType) {
+  if (weathers[weatherType]) {
+    return weathers[weatherType]
+  } else if (weathers.Atmosphere[weatherType]) {
+    return weathers.Atmosphere[weatherType]
+  } else { console.error("could not find weather type")
+  }
+}
 
 //Wait until the window loads to fire the rest of the code
 $(window).on("load", function () {
@@ -169,8 +177,8 @@ $(window).on("load", function () {
 
   // Create a function to change the weather background
   function changeWeather(startWeather, targetWeather) {
-    startWeather = weathers[startWeather];
-    targetWeather = weathers[targetWeather];
+    startWeather = getWeatherType(startWeather);
+    targetWeather = getWeatherType(targetWeather);
     // Create a temporary background element with the startWeather image
     const tempBackground = $("<div>")
       .css({
@@ -415,14 +423,7 @@ $(window).on("load", function () {
   }
 
 
-  function getWeatherType(weatherType) {
-    if (weathers[weatherType]) {
-    return weathers[weatherType]
-    } else if (weathers.Atmosphere[weatherType]) {
-    return weathers.Atmosphere[weatherType]
-    } else { console.error("could not find weather type")
-    }
-  }
+ 
   // navigator.geolocation.getCurrentPosition(function (position) {
   //   var latitude = position.coords.latitude;
   //   var longitude = position.coords.longitude;
