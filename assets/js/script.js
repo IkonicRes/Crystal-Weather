@@ -473,11 +473,8 @@ $(window).on("load", function () {
                   };
 
                   // Check if city already exists in the stored cities array
-                  const cityExists = storedCities.some(
-                    (storedCity) =>
-                      storedCity.city.toLowerCase() === cityName.toLowerCase()
-                  );
-
+                  const cityExists = storedCities.some((storedCity) => storedCity.city.toLowerCase() === cityName.toLowerCase());
+                  console.log(cityExists);
                   if (!cityExists) {
                     // Save to localStorage
                     storedCities.push(cityWeather);
@@ -488,7 +485,16 @@ $(window).on("load", function () {
 
                     // Add to gallery
                     addCityToGallery(cityWeather);
+                  } else {
+                    storedCities.forEach(element => {
+                      if (element.city.toLowerCase() === cityName.toLowerCase()) {
+                        element.weatherCondition = condition;
+                        element.weatherImage = imageFileName;
+                      }
+                    });
+                    localStorage.setItem( "cities", JSON.stringify(storedCities))
                   }
+            
                   fDegree = Math.floor(((data.main.temp - 273.15) * 9) / 5 + 32);
                   $("#info-display").html(
                     `
