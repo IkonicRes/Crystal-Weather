@@ -487,7 +487,7 @@ $(window).on("load", function () {
                     addCityToGallery(cityWeather);
                   } else {
                     storedCities.forEach(element => {
-                      if (element.city.toLowerCase() === cityName.toLowerCase()) {
+                      if (element.city.toLowerCase() === cityName.toLowerCase() && element.country === cityWeather.country)  {
                         element.weatherCondition = condition;
                         element.weatherImage = imageFileName;
                       }
