@@ -416,10 +416,10 @@ $(window).on("load", function () {
 
 
   function getWeatherType(weatherType) {
-    if (weather[weatherType]) {
-    return weather[weatherType]
-    } else if (weather["atmosphere"][weatherType]) {
-    return weather["atmosphere"][weatherType]
+    if (weathers[weatherType]) {
+    return weathers[weatherType]
+    } else if (weathers["atmosphere"][weatherType]) {
+    return weathers["atmosphere"][weatherType]
     } else { console.error("could not find weather type")
     }
   }
@@ -453,11 +453,12 @@ $(window).on("load", function () {
           fetch(apiWeatherUrl)
             .then((response) => response.json())
             .then((data) => {
-              console.log(data)
               // Handle the API response
+              console.log(data)
               if (data) {
                 let condition = data.weather[0].main;
                 let iconUrl = `http://openweathermap.org/img/w/${data.weather[0].icon}.png`;
+                console.log(condition)
                 previousData = currentData;
                 currentData = condition;
                 changeWeather(previousData, currentData);
