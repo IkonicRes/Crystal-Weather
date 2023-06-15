@@ -414,6 +414,14 @@ $(window).on("load", function () {
     });
   }
 
+
+  function getWeatherType(weatherType) {
+    if (weather[weatherType]) {
+    return weather[weatherType]
+    } else if (weather["atmosphere"][weatherType]) {
+    return weather["atmosphere"][weatherType]
+    } else { console.error("could not find weather type")
+    }
   // navigator.geolocation.getCurrentPosition(function (position) {
   //   var latitude = position.coords.latitude;
   //   var longitude = position.coords.longitude;
@@ -446,18 +454,10 @@ $(window).on("load", function () {
             .then((data) => {
               console.log(data)
               // Handle the API response
-              if (data) {
-                let condition = data.weather[0].main;
-                let iconUrl = `http://openweathermap.org/img/w/${data.weather[0].icon}.png`;
                 previousData = currentData;
                 currentData = condition;
                 changeWeather(previousData, currentData);
-                let imageFileName;
-                if (weathers[condition]) {
-                  imageFileName = weathers[condition];
-                } else if (weathers["Atmosphere"][condition]) {
-                  imageFileName = weathers["Atmosphere"][condition];
-                }
+                let imageFileName = getWeatherType(data.weather);
 
                 if (imageFileName) {
                   const cityWeather = {
