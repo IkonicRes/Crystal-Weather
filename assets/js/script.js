@@ -418,8 +418,8 @@ $(window).on("load", function () {
   function getWeatherType(weatherType) {
     if (weathers[weatherType]) {
     return weathers[weatherType]
-    } else if (weathers["atmosphere"][weatherType]) {
-    return weathers["atmosphere"][weatherType]
+    } else if (weathers.Atmosphere[weatherType]) {
+    return weathers.Atmosphere[weatherType]
     } else { console.error("could not find weather type")
     }
   }
