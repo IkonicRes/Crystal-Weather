@@ -435,7 +435,7 @@ $(window).on("load", function () {
 
   function weatherFetch() {
     var apiLocationUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${cityName}&limit=1&appid=${apiKey}`;
-
+  
     // Make the API request
     fetch(apiLocationUrl)
       .then((response) => response.json())
@@ -444,65 +444,72 @@ $(window).on("load", function () {
         if (data.length > 0) {
           var latitude = data[0].lat;
           var longitude = data[0].lon;
-
+  
           fetch5DayForecast(latitude, longitude);
           var apiWeatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}`;
-
+  
           // Make the API request
           fetch(apiWeatherUrl)
             .then((response) => response.json())
             .then((data) => {
-              console.log(data)
+              console.log(data);
               // Handle the API response
-                previousData = currentData;
-                currentData = condition;
-                changeWeather(previousData, currentData);
-                let imageFileName = getWeatherType(data.weather);
-
-                if (imageFileName) {
-                  const cityWeather = {
-                    city: cityName,
-                    country: data.sys.country,
-                    weatherCondition: condition,
-                    weatherImage: imageFileName,
-                  };
-
-                  // Check if city already exists in the stored cities array
-                  const cityExists = storedCities.some(
-                    (storedCity) =>
-                      storedCity.city.toLowerCase() === cityName.toLowerCase()
+              previousData = currentData;
+              currentData = condition;
+              changeWeather(previousData, currentData);
+              let imageFileName = getWeatherType(data.weather);
+  
+              if (imageFileName) {
+                const cityWeather = {
+                  city: cityName,
+                  country: data.sys.country,
+                  weatherCondition: condition,
+                  weatherImage: imageFileName,
+                };
+  
+                // Check if city already exists in the stored cities array
+                const cityExists = storedCities.some(
+                  (storedCity) => storedCity.city.toLowerCase() === cityName.toLowerCase()
+                );
+  
+                if (!cityExists) {
+                  // Save to localStorage
+                  storedCities.push(cityWeather);
+                  localStorage.setItem(
+                    "cities",
+                    JSON.stringify(storedCities)
                   );
-
-                  if (!cityExists) {
-                    // Save to localStorage
-                    storedCities.push(cityWeather);
-                    localStorage.setItem(
-                      "cities",
-                      JSON.stringify(storedCities)
-                    );
-
-                    // Add to gallery
-                    addCityToGallery(cityWeather);
-                  }
-                  fDegree = Math.floor(((data.main.temp - 273.15) * 9) / 5 + 32);
-                  $("#info-display").html(
-                    `
-                    <img src="${iconUrl}" alt="${data.weather[0].main}" class="weather-icon-main"></div>
-                    <div class="info">${dayjs(data.date).format("MMM D")}</div>
+  
+                  // Add to gallery
+                  addCityToGallery(cityWeather);
+                }
+                fDegree = Math.floor(((data.main.temp - 273.15) * 9) / 5 + 32);
+                $("#info-display").html(
+                  `
+                  <img src="${iconUrl}" alt="${data.weather[0].main}" class="weather-icon-main"></div>
+                  <div class="info">${dayjs(data.date).format("MMM D")}</div>
                   <div class="info">City: ${cityName}</div>
                   <div class="info">Condition: ${condition}</div>
                   <div class="info">Temperature: ${fDegree}°F</div>
                   <div class="info">Humidity: ${data.main.humidity}%</div>
                   <div class="info">Wind Speed: ${data.wind.speed}m/s</div>`
-                  );
-                } else { console.error(`No image file name found for the condition: ${condition}`); }
-              } else { console.log("No results found for the specified location."); }
+                );
+              } else {
+                console.error(`No image file name found for the condition: ${condition}`);
+              }
             })
-            .catch((error) => { console.error(`API request failed. Error:${error}`); });
-        } else { console.warn("No results found for the specified city."); }
+            .catch((error) => {
+              console.error(`API request failed. Error: ${error}`);
+            });
+        } else {
+          console.warn("No results found for the specified city.");
+        }
       })
-      .catch((error) => { console.error("API request failed. Error:", error); });
+      .catch((error) => {
+        console.error("API request failed. Error:", error);
+      });
   }
+  
 // When the user presses "enter" on the search bar, get the value on the search bar, capitalize the first letter, and set the "cityName variable" to it
   $("#search-bar").keypress(function (event) {
     var keycode = event.keyCode ? event.keyCode : event.which;
@@ -529,4 +536,5 @@ $(window).on("load", function () {
     cityName = "Minneapolis";
     weatherFetch();
   }, 200);
+}
 });
