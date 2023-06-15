@@ -19,14 +19,6 @@ function mode(array) {
     )
     .pop();
 }
-function getWeatherType(weatherType) {
-  if (weathers[weatherType]) {
-    return weathers[weatherType]
-  } else if (weathers.Atmosphere[weatherType]) {
-    return weathers.Atmosphere[weatherType]
-  } else { console.error("could not find weather type")
-  }
-}
 
 //Wait until the window loads to fire the rest of the code
 $(window).on("load", function () {
@@ -62,6 +54,15 @@ $(window).on("load", function () {
         Tornado: getAssetUrl("assets/images/backgrounds/tornado.png"),
       },
     };
+
+    function getWeatherType(weatherType) {
+      if (weathers[weatherType]) {
+        return weathers[weatherType]
+      } else if (weathers.Atmosphere[weatherType]) {
+        return weathers.Atmosphere[weatherType]
+      } else { console.error("could not find weather type")
+      }
+    }
 
     // Initializing variables for later use.
     var tForecasts = [];
