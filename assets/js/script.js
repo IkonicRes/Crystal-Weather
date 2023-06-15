@@ -456,11 +456,9 @@ $(window).on("load", function () {
             .then((response) => response.json())
             .then((data) => {
               // Handle the API response
-              console.log(data)
               if (data) {
                 let condition = data.weather[0].main;
                 let iconUrl = `http://openweathermap.org/img/w/${data.weather[0].icon}.png`;
-                console.log(condition)
                 previousData = currentData;
                 currentData = condition;
                 changeWeather(previousData, currentData);
