@@ -33,6 +33,7 @@ body {
   height: var(--forecast-height);
   background-color: var(--forecast-bkgcolor);
   margin-right: var(--forecast-marginright);
+  font-size: var(--forecast-fontsize);
 }
 
 h2 {

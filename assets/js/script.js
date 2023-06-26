@@ -474,7 +474,6 @@ $(window).on("load", function () {
 
                   // Check if city already exists in the stored cities array
                   const cityExists = storedCities.some((storedCity) => storedCity.city.toLowerCase() === cityName.toLowerCase());
-                  console.log(cityExists);
                   if (!cityExists) {
                     // Save to localStorage
                     storedCities.push(cityWeather);

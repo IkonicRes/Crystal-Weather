@@ -23,12 +23,13 @@
         --info-textshadow: -1px 1px 1px var(--info-shadowcolor),
         1px 1px 1px var(--info-shadowcolor),
         -1px -1px 1px var(--info-shadowcolor),
-        1px -1px 1px var(--shadowcolor);
+        1px -1px 1px var(--info-shadowcolor);
         --searchinput-hover-opacity: 1;
         --search-focuswithin-opacity: 1;
         --gallerycell-lineheight: 200px;
     /* SIZES  */
         --h1-textsize: 2vw;
+        --forecast-textsize: 1rem;
         --searchinput-textsize: 0;
         --searchinput-hover-textsize: 1rem;
         --search-focuswithin-textsize: 1rem;
