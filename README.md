@@ -32,7 +32,7 @@ and Tornado
 <left>
 ## Usage
 
-Head on over here to check out the page ==> [Scheduler App](https://ikonicres.github.io/Crystal-Weather)    <center>
+Head on over here to check out the page ==> [Crystal Weather] (https://ikonicres.github.io/Crystal-Weather)    <center>
 I worked hard to make the app as simple and elegant as possible:  <center>
 
 The app has a pleasing set of background images that appear on the gallery, the page background, and the forecast cards. I made a favicon to round out the page, and added a nice transition animation that overlays clouds for a few seconds. Using the search button on the bottom of the page, the user can enter any city with country code they would like (e.g. Houston, US), and the city gets added to their gallery at the bottom. The gallery is saved to local storage to persist through uses, and clicking one of the saved cities on the bottom carousel changes the info and backgrounds on the page to that city's. The main page displays an icon of the current weather condition, date, city name, weather condition, temp, humidity and wind speed. The 5 day forecast displays much of the same info, but contains a mode of each throughout the day. <center>
