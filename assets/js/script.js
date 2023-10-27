@@ -1,13 +1,18 @@
 //Our snippet function to get the correct path to assets on deployment, initialize the base directory as
 //the pretext to our relative path
+const production = true
 const baseDir = window.location.origin
 //  + window.location.pathname
 console.log(baseDir)
 // Helper Functions
 // Call this function any time you need to get the path and pass in relative path as the argument
 getAssetUrl = (assetPath) => { 
-  console.log(baseDir + assetPath)
-  return baseDir + assetPath 
+  if (production){
+    return `${baseDir}/Crystal-Weather${assetPath}`
+  }
+  else{
+    return baseDir + assetPath
+  }
 }
 
 // Helper function for capitalizing the first letter of a string
