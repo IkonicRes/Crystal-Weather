@@ -1,10 +1,14 @@
 //Our snippet function to get the correct path to assets on deployment, initialize the base directory as
 //the pretext to our relative path
-const baseDir = window.location.origin + window.location.pathname
-
+const baseDir = window.location.origin
+//  + window.location.pathname
+console.log(baseDir)
 // Helper Functions
 // Call this function any time you need to get the path and pass in relative path as the argument
-function getAssetUrl(assetPath) { return baseDir + assetPath }
+getAssetUrl = (assetPath) => { 
+  console.log(baseDir + assetPath)
+  return baseDir + assetPath 
+}
 
 // Helper function for capitalizing the first letter of a string
 function capitalizeFirstLetter(string) { return string.charAt(0).toUpperCase() + string.slice(1); }
@@ -35,23 +39,23 @@ $(window).on("load", function () {
 
     // Create an object containing the different weather types
     const weathers = {
-      Blank: getAssetUrl("assets/images/backgrounds/blank.png"),
-      Clear: getAssetUrl("assets/images/backgrounds/sunny-clear.png"),
-      Clouds: getAssetUrl("assets/images/backgrounds/cloudy-clear.png"),
-      Rain: getAssetUrl("assets/images/backgrounds/sunny-rain.png"),
-      Snow: getAssetUrl("assets/images/backgrounds/snowy.png"),
-      Drizzle: getAssetUrl("assets/images/backgrounds/sunny-showers.png"),
-      Thunderstorm: getAssetUrl("assets/images/backgrounds/thunder-storm.png"),
+      Blank: getAssetUrl("/assets/images/backgrounds/blank.png"),
+      Clear: getAssetUrl("/assets/images/backgrounds/sunny-clear.png"),
+      Clouds: getAssetUrl("/assets/images/backgrounds/cloudy-clear.png"),
+      Rain: getAssetUrl("/assets/images/backgrounds/sunny-rain.png"),
+      Snow: getAssetUrl("/assets/images/backgrounds/snowy.png"),
+      Drizzle: getAssetUrl("/assets/images/backgrounds/sunny-showers.png"),
+      Thunderstorm: getAssetUrl("/assets/images/backgrounds/thunder-storm.png"),
       Atmosphere: {
-        Mist: getAssetUrl("assets/images/backgrounds/misty.png"),
-        Smoke: getAssetUrl("assets/images/backgrounds/smoky.png"),
-        Haze: getAssetUrl("assets/images/backgrounds/hazy.png"),
-        Dust: getAssetUrl("assets/images/backgrounds/dusty.png"),
-        Fog: getAssetUrl("assets/images/backgrounds/foggy.png"),
-        Sand: getAssetUrl("assets/images/backgrounds/sandy.png"),
-        Ash: getAssetUrl("assets/images/backgrounds/ashy.png"),
-        Squall: getAssetUrl("assets/images/backgrounds/squall.png"),
-        Tornado: getAssetUrl("assets/images/backgrounds/tornado.png"),
+        Mist: getAssetUrl("/assets/images/backgrounds/misty.png"),
+        Smoke: getAssetUrl("/assets/images/backgrounds/smoky.png"),
+        Haze: getAssetUrl("/assets/images/backgrounds/hazy.png"),
+        Dust: getAssetUrl("/assets/images/backgrounds/dusty.png"),
+        Fog: getAssetUrl("/assets/images/backgrounds/foggy.png"),
+        Sand: getAssetUrl("/assets/images/backgrounds/sandy.png"),
+        Ash: getAssetUrl("/assets/images/backgrounds/ashy.png"),
+        Squall: getAssetUrl("/assets/images/backgrounds/squall.png"),
+        Tornado: getAssetUrl("/assets/images/backgrounds/tornado.png"),
       },
     };
 
@@ -199,11 +203,11 @@ $(window).on("load", function () {
       .hide();
     // Define the image sources for the cloud animation
     const imageSources = [
-      getAssetUrl("assets/images/animation/cloud1.png"),
-      getAssetUrl("assets/images/animation/cloud2.png"),
-      getAssetUrl("assets/images/animation/cloud3.png"),
-      getAssetUrl("assets/images/animation/cloud4.png"),
-      getAssetUrl("assets/images/animation/cloud5.png"),
+      getAssetUrl("/assets/images/animation/cloud1.png"),
+      getAssetUrl("/assets/images/animation/cloud2.png"),
+      getAssetUrl("/assets/images/animation/cloud3.png"),
+      getAssetUrl("/assets/images/animation/cloud4.png"),
+      getAssetUrl("/assets/images/animation/cloud5.png"),
     ];
     // Create an array to store the loaded cloud images
     const images = [];
@@ -325,12 +329,12 @@ $(window).on("load", function () {
       let opacity = 1;
       // Set an interval to gradually decrease the opacity
       const fadeInterval = setInterval(function () {
-        opacity -= 0.01;
+        opacity -= 0.05;
         // When opacity reaches 0, clear the interval, stop the animation, fade out the canvas, and remove it
-        if (opacity <= 0) {
+        if (opacity <= .1) {
           clearInterval(fadeInterval);
-          stopAnimation();
           $(canvas).fadeOut(1000, function () {
+            stopAnimation();
             $(this).remove();
           });
         } else {
@@ -345,9 +349,11 @@ $(window).on("load", function () {
               canvas[0].width * 1.5,
               canvas[0].height * 1.5
             );
+
+
           });
         }
-      }, 20);
+      }, 50);
     }
   }
   //DEBUG: Call the changeWeather function with the startWeather and targetWeather as arguments

@@ -54,7 +54,7 @@
         --search-focuswithin-maxheight: 5rem;
         --search-focuswithin-height: 2rem;
         --gallery-width: 75vw;
-        --gallery-height: 15vh;
+        --gallery-height: 100%;
         --gallerycell-width: 12vw;
         --gallerycell-height: 11vh;
     /* SPACING */
@@ -62,7 +62,7 @@
         --h1-padding: .2vw;
         --title-header-marginleft: 32vw;
         --info-marginright: 1vw;
-        --info-display-margin: 1vw 0 0 15vw;
+        --info-display-margin: 1vh 0 0 15vw;
         --search-margin: auto auto 1vw auto;
         --search-paddingleft: 2.25rem;
         --searchinput-margin: auto 0 auto 0;
@@ -72,7 +72,7 @@
         --search-focuswithin-padding: .8vw;
         --search-focuswithin-marginleft: 13px;
         --gallerycell-padding: 20px;
-        --forecast-card-margin: .5vw .5vw .5vw .5vw;
+        --forecast-card-margin: .5vh .5vw .5vh .5vw;
         --forecast-card-padding: .4vw 0 0 .4vw;
         --navigation-marginleft: 5vw;
     /* BORDERS */
