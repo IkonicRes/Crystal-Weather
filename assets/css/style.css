@@ -226,3 +226,42 @@ cell number */ */
   -webkit-box-sizing: content-box !important;
   box-sizing: content-box !important;
 }
+
+
+/* Responsive Layout for mobile devices*/
+/*Extra small devices (phones, 600px and down)*/
+@media only screen and (max-width: 600px) {
+  header {
+    flex-direction: column;
+  }
+  #title-header {
+    margin-left: 0;
+    margin-right: calc(30vw - var(--forecast-minwidth));
+  }
+  #info-display {
+    padding-left: calc(20vw - var(--forecast-minwidth));
+    margin-top: 15vh;
+  }
+  #forecast {
+    margin-right: 0;
+  }
+  .forecast-card {
+    font-size: 2.25vw
+  }
+  .gallery, .flickity-viewport {
+    height: 7.5vh;
+    margin-bottom: 5vh;
+  }
+  #navigation{
+  margin-left: 0;
+  padding: 0;
+  }
+}
+/*Small devices (portrait tablets and large phones, 600px and up)*/
+@media only screen and (min-width: 600px) {...}
+/* Medium devices (landscape tablets, 768px and up)*/
+@media only screen and (min-width: 768px) {...}
+/* Large devices (laptops/desktops, 992px and up)*/
+@media only screen and (min-width: 992px) {...}
+/* Extra large devices (large laptops and desktops, 1200px and up)*/
+@media only screen and (min-width: 1200px) {...}
