@@ -4,7 +4,7 @@
         --menu-bkgcolor: black;
         --h1-bkgcolor: rgba(0, 0, 0, 0.168);
         --forecast-bkgcolor: rgba(0, 0, 0, 0.226);
-        --forecast-card-bkgcolor: red;
+        --forecast-card-bkgcolor: rgb(8, 0, 0);
         --searchinput-bkgcolor: #ffffff56;
         --gallery-bkgcolor: rgba(0, 0, 0, .307);
         --gallerycell-bkgcolor: rgba(73, 73, 73, 0.504);

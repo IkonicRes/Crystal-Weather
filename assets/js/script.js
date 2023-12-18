@@ -301,14 +301,18 @@ $(window).on("load", function () {
         if (layer.xPos > canvas[0].width) {
           layer.xPos = -canvas[0].width;
         }
-
-        ctx.drawImage(
-          images[layer.imageIndex],
-          layer.xPos,
-          0,
-          canvas[0].width * 1.5,
-          canvas[0].height * 1.5
-        );
+        try {
+          ctx.drawImage(
+            images[layer.imageIndex],
+            layer.xPos,
+            0,
+            canvas[0].width * 1.5,
+            canvas[0].height * 1.5
+          );
+        } 
+        catch (err) {
+          console.error(`Error drawing image: ${err}`)  
+        }
       });
 
       window.requestAnimationFrame(animate);
@@ -345,18 +349,21 @@ $(window).on("load", function () {
         } else {
           ctx.clearRect(0, 0, canvas[0].width, canvas[0].height);
           ctx.globalAlpha = opacity;
-
-          cloudLayers.forEach((layer) => {
-            ctx.drawImage(
-              images[layer.imageIndex],
-              layer.xPos,
-              0,
-              canvas[0].width * 1.5,
-              canvas[0].height * 1.5
-            );
-
-
-          });
+          try {
+            cloudLayers.forEach((layer) => {
+              ctx.drawImage(
+                images[layer.imageIndex],
+                layer.xPos,
+                0,
+                canvas[0].width * 1.5,
+                canvas[0].height * 1.5
+              );
+            
+            });
+          } 
+          catch (err) {
+            console.error(`Error drawing cloud fade: ${err}`)
+          }
         }
       }, 50);
     }
