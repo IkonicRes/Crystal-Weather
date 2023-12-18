@@ -302,4 +302,38 @@ cell number */ */
 /* Large devices (laptops/desktops, 992px and up)*/
 @media only screen and (min-width: 992px) {...}
 /* Extra large devices (large laptops and desktops, 1200px and up)*/
-@media only screen and (min-width: 1200px) {...}
+@media only screen and (min-width: 1200px) {
+  @media only screen and (min-width: 600px) {
+    body{
+      background-size: cover;
+    }
+    header {
+      flex-direction: row;
+    }
+    #title-header {
+      margin-left: var(--title-header-marginleft);
+      margin-right: auto;
+    }
+    #info-display {
+      padding-left: 0;
+      margin: var(--info-display-margin);
+    }
+    #forecast {
+      margin-right: var(--forecast-marginright);
+    }
+    h2 {
+      font-size: 1em;
+    }
+    .forecast-card {
+      font-size: 1em
+    }
+    .gallery, .flickity-viewport {
+      height: var(--gallery-height);
+      margin-bottom: 5vh;
+    }
+    #navigation{
+    margin-left: 0;
+    padding: 0;
+    }
+  }
+}
