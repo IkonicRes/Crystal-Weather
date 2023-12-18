@@ -231,6 +231,9 @@ cell number */ */
 /* Responsive Layout for mobile devices*/
 /*Extra small devices (phones, 600px and down)*/
 @media only screen and (max-width: 600px) {
+  body{
+    background-size: contain;
+  }
   header {
     flex-direction: column;
   }
@@ -241,6 +244,9 @@ cell number */ */
   #info-display {
     padding-left: calc(20vw - var(--forecast-minwidth));
     margin-top: 15vh;
+  }
+  h2 {
+    font-size: .75em;
   }
   #forecast {
     margin-right: 0;
@@ -259,6 +265,9 @@ cell number */ */
 }
 /*Small devices (portrait tablets and large phones, 600px and up)*/
 @media only screen and (min-width: 600px) {
+  body{
+    background-size: contain;
+  }
   header {
     flex-direction: column;
   }
@@ -272,6 +281,9 @@ cell number */ */
   }
   #forecast {
     margin-right: 0;
+  }
+  h2 {
+    font-size: .75em;
   }
   .forecast-card {
     font-size: 2.25vw
